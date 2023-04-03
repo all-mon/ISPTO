@@ -35,8 +35,11 @@ namespace Diplom.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Device
-                .FirstOrDefaultAsync(m => m.ID == id);
+            /*var device = await _context.Device
+                .FirstOrDefaultAsync(m => m.ID == id);*/
+            var device = await _context.Device.Include(d => d.DevicePlacements).ThenInclude(dp => dp.Placement).AsNoTracking().
+                FirstOrDefaultAsync(p => p.ID == id);
+
             if (device == null)
             {
                 return NotFound();
