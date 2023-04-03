@@ -21,11 +21,17 @@ namespace Diplom.Controllers
         }
 
         // GET: Devices
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
 
             var devices = from d in _context.Device select d;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                devices = devices.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
+            }
 
             switch (sortOrder) 
             {
