@@ -21,11 +21,23 @@ namespace Diplom.Controllers
         }
 
         // GET: Devices
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-              return _context.Device != null ? 
-                          View(await _context.Device.ToListAsync()) :
-                          Problem("Entity set 'DiplomContext.Device'  is null.");
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
+
+            var devices = from d in _context.Device select d;
+
+            switch (sortOrder) 
+            {
+                case "name_desc":
+                    devices = devices.OrderByDescending( d => d.Name);
+                    break;
+                default:
+                    devices = devices.OrderBy(_ => _.Name);
+                    break;
+            }
+            return View(await devices.AsNoTracking().ToListAsync());
+
         }
 
         // GET: Devices/Details/5
@@ -38,7 +50,7 @@ namespace Diplom.Controllers
 
             /*var device = await _context.Device
                 .FirstOrDefaultAsync(m => m.ID == id);*/
-            var device = await _context.Device.Include(d => d.DevicePlacements).ThenInclude(dp => dp.Placement).AsNoTracking().
+            var device = await _context.Device.Include(d => d.DevicePlacements)!.ThenInclude(dp => dp.Placement).AsNoTracking().
                 FirstOrDefaultAsync(p => p.ID == id);
 
             if (device == null)
@@ -55,9 +67,6 @@ namespace Diplom.Controllers
             return View();
         }
 
-        // POST: Devices/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,ImagePath,DocumentPath")] Device device)
@@ -77,15 +86,12 @@ namespace Diplom.Controllers
 
                 // Log the error(uncomment ex variable name and write a log.
                 ModelState.AddModelError("", "Unable to save changes. " +
-            "Try again, and if the problem persists " +
-            "see your system administrator.");
+                    "Try again, and if the problem persists " +
+                    "see your system administrator.");
             }
-
-            
             return View(device);
         }
 
-        // GET: Devices/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Device == null)
@@ -101,40 +107,6 @@ namespace Diplom.Controllers
             return View(device);
         }
 
-        // POST: Devices/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-       /* [HttpPost]
-        [ValidateAntiForgeryToken]*/
-        /*public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,ImagePath,DocumentPath")] Device device)
-        {
-            if (id != device.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(device);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DeviceExists(device.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(device);
-        }*/
         [HttpPost,ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(int? id)
@@ -146,7 +118,7 @@ namespace Diplom.Controllers
             var deviceToUpdate = await _context.Device.FirstOrDefaultAsync(s=>s.ID == id);
 
             if (await TryUpdateModelAsync<Device>(
-                deviceToUpdate ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
+                deviceToUpdate! ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
             {
                 try
                 {
@@ -188,25 +160,6 @@ namespace Diplom.Controllers
 
             return View(device);
         }
-
-        /* // POST: Devices/Delete/5
-         [HttpPost, ActionName("Delete")]
-         [ValidateAntiForgeryToken]
-         public async Task<IActionResult> DeleteConfirmed(int id)
-         {
-             if (_context.Device == null)
-             {
-                 return Problem("Entity set 'DiplomContext.Device'  is null.");
-             }
-             var device = await _context.Device.FindAsync(id);
-             if (device != null)
-             {
-                 _context.Device.Remove(device);
-             }
-
-             await _context.SaveChangesAsync();
-             return RedirectToAction(nameof(Index));
-         }*/
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
