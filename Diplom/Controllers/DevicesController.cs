@@ -21,9 +21,20 @@ namespace Diplom.Controllers
         }
 
         // GET: Devices
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
+            
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             ViewData["CurrentFilter"] = searchString;
 
             var devices = from d in _context.Device select d;
@@ -42,7 +53,8 @@ namespace Diplom.Controllers
                     devices = devices.OrderBy(_ => _.Name);
                     break;
             }
-            return View(await devices.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Device>.CreateAsync(devices.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }
 
