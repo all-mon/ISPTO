@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
 using System.Xml.Linq;
+using Diplom.Models.ViewModels;
 
 namespace Diplom.Controllers
 {
@@ -117,27 +118,49 @@ namespace Diplom.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Device.FindAsync(id);
+            var device = await _context.Device.Include(d => d.DevicePlacements).ThenInclude(i => i.Placement).AsNoTracking().FirstOrDefaultAsync(s=>s.ID == id);  
             if (device == null)
             {
                 return NotFound();
             }
+            PopulateAssignedPlacementData(device);
             return View(device);
         }
 
-        [HttpPost,ActionName("Edit")]
+        private void PopulateAssignedPlacementData(Device device)
+        {
+            var AllPlacement = _context.Placement;
+            var devicePlacements = new HashSet<int>(device.DevicePlacements.Select(p => p.PlacementID));
+            var viewModel = new List<AssignedPlacementData>();
+            foreach (var place in AllPlacement)
+            {
+                viewModel.Add(new AssignedPlacementData
+                {
+                    PlacementID = place.ID,
+                    Title = place.Name,
+                    Assigned = devicePlacements.Contains(place.ID)
+                });
+            }
+            ViewData["Placements"] = viewModel;
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)
+        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var deviceToUpdate = await _context.Device.FirstOrDefaultAsync(s=>s.ID == id);
+            var deviceToUpdate = await _context.Device.Include(d => d.DevicePlacements)
+                .ThenInclude(p=>p.Placement).FirstOrDefaultAsync(d=>d.ID == id);
 
             if (await TryUpdateModelAsync<Device>(
                 deviceToUpdate! ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
             {
+                UpdateDevicePlacements(selectedPlacements,deviceToUpdate);
+                PopulateAssignedPlacementData(deviceToUpdate!);
+
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -151,8 +174,45 @@ namespace Diplom.Controllers
                         "see your system administrator.");
                 }
             }
-
+            UpdateDevicePlacements (selectedPlacements, deviceToUpdate);
+            PopulateAssignedPlacementData (deviceToUpdate);
             return View(deviceToUpdate);
+        }
+
+        private void UpdateDevicePlacements(string[] selectedPlacements, Device deviceToUpdate)
+        {
+            if (selectedPlacements == null)
+            {
+                deviceToUpdate!.DevicePlacements = new List<DevicePlacement>();
+                return;
+            }
+
+            var selectedPlacementsHS = new HashSet<string>(selectedPlacements);
+            var devicePlacementsHS = new HashSet<int>(deviceToUpdate!.DevicePlacements!.Select(p=>p.Placement.ID));
+
+            foreach (var place in _context.Placement)
+            {
+                if (selectedPlacementsHS.Contains(place.ID.ToString()))
+                {
+                    if (!devicePlacementsHS.Contains(place.ID))
+                    {
+                        deviceToUpdate.DevicePlacements!.Add(new DevicePlacement
+                        {
+                            PlacementID = place.ID,
+                            DeviceID = deviceToUpdate.ID
+                        });
+                    }
+                }
+                else
+                {
+                    if (devicePlacementsHS.Contains(place.ID))
+                    {
+                        DevicePlacement dpToRemove = deviceToUpdate.DevicePlacements!.FirstOrDefault(i => i.PlacementID == place.ID)!;
+                        _context.Remove(dpToRemove!);
+                    }
+                }
+            }
+
         }
 
         // GET: Devices/Delete/5

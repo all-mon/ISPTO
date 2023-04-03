@@ -14,8 +14,16 @@ namespace Diplom.Data
         {
         }
 
-        public DbSet<Diplom.Models.Device> Device { get; set; } = default!;
+        public DbSet<Diplom.Models.Device> Device { get; set; }
         public DbSet<Diplom.Models.Placement> Placement { get; set; } 
         public DbSet<Diplom.Models.DevicePlacement> DevicePlacement { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+
+            modelBuilder.Entity<DevicePlacement>()
+                .HasKey(c => new { c.DeviceID, c.PlacementID });
+        }
     }
 }

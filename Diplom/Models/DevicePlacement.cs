@@ -2,7 +2,6 @@
 {
     public class DevicePlacement
     {
-        public int Id { get; set; }
         public int DeviceID { get; set; }
         public int PlacementID { get; set; }
 

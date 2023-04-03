@@ -33,6 +33,36 @@
                 <input asp-for="DocumentPath" class="form-control" />
                 <span asp-validation-for="DocumentPath" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <table>
+            <tr>
+                @{
+                    int cnt = 0;
+                    List<Diplom.Models.ViewModels.AssignedPlacementData> placements = ViewBag.Placements;
+
+                    foreach (var place in placements)
+                    {
+                        if (cnt++ % 3 == 0)
+                        {
+                            @:</tr><tr>
+                        }
+                        @:<td>
+                            <input type="checkbox"
+                                   name="selectedPlacements"
+                                   value="@place.PlacementID"
+                                   @(Html.Raw(place.Assigned ? "checked=\"checked\"" : "")) />
+                                   @place.PlacementID @:  @place.Title
+                        @:</td>
+                    }
+                    @:</tr>
+                }
+        </table>
+    </div>
+</div>
+
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
