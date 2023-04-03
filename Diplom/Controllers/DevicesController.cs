@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
+using System.Xml.Linq;
 
 namespace Diplom.Controllers
 {
@@ -59,14 +60,28 @@ namespace Diplom.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,ImagePath,DocumentPath")] Device device)
+        public async Task<IActionResult> Create([Bind("Name,Description,ImagePath,DocumentPath")] Device device)
         {
-            if (ModelState.IsValid)
+            // var errors = ModelState.Values.SelectMany(v => v.Errors);
+            try
             {
-                _context.Add(device);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(device);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            catch (DbUpdateException)
+            {
+
+                // Log the error(uncomment ex variable name and write a log.
+                ModelState.AddModelError("", "Unable to save changes. " +
+            "Try again, and if the problem persists " +
+            "see your system administrator.");
+            }
+
+            
             return View(device);
         }
 
@@ -89,9 +104,9 @@ namespace Diplom.Controllers
         // POST: Devices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,ImagePath,DocumentPath")] Device device)
+       /* [HttpPost]
+        [ValidateAntiForgeryToken]*/
+        /*public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,ImagePath,DocumentPath")] Device device)
         {
             if (id != device.ID)
             {
@@ -119,6 +134,35 @@ namespace Diplom.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(device);
+        }*/
+        [HttpPost,ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPost(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var deviceToUpdate = await _context.Device.FirstOrDefaultAsync(s=>s.ID == id);
+
+            if (await TryUpdateModelAsync<Device>(
+                deviceToUpdate ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+
+            return View(deviceToUpdate);
         }
 
         // GET: Devices/Delete/5
