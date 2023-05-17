@@ -54,7 +54,8 @@ namespace Diplom.Controllers
                     devices = devices.OrderBy(_ => _.Name);
                     break;
             }
-            int pageSize = 3;
+            //количество записей на странице
+            int pageSize = 10;
             return View(await PaginatedList<Device>.CreateAsync(devices.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }

@@ -8,8 +8,9 @@ namespace Diplom.Models
 
         public int ID { get; set; }
         [DisplayName("Название")]
-        [MaxLength(255)]
-        public string? Name { get; set; }
+        [Required(ErrorMessage ="Введите название")]
+        [MaxLength(100)]
+        public string Name { get; set; } = "Без названия";
         [DisplayName("Описание")]
         [MaxLength(255)]
         public string? Description { get; set; }
@@ -20,8 +21,12 @@ namespace Diplom.Models
         [DisplayName("Документация")]
         [MaxLength(255)]
         public string? DocumentPath { get; set; }
+        [DisplayName("Аналоги")]
+        public string? Analogue { get; set; }
+        [DisplayName("Количество в запасе")]
+        public int QuantityInStock { get; set; }
 
-
+        [DisplayName("Места установки")]
         public ICollection<DevicePlacement>? DevicePlacements { get; set; }
 
 
