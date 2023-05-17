@@ -10,7 +10,7 @@ namespace Diplom.Models
         [DisplayName("Название")]
         [Required(ErrorMessage ="Введите название")]
         [MaxLength(100)]
-        public string Name { get; set; } = "Без названия";
+        public string Name { get; set; } = "Empty";
         [DisplayName("Описание")]
         [MaxLength(255)]
         public string? Description { get; set; }
