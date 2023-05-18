@@ -40,18 +40,19 @@ namespace Diplom.Controllers
 
             var devices = from d in _context.Device select d;
 
+            //поиск по имени или описанию
             if (!String.IsNullOrEmpty(searchString))
             {
-                devices = devices.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
+                devices = devices.Where(d => d.Name!.Contains(searchString) || d.Description.Contains(searchString));
             }
-
+            //сортировка по имети
             switch (sortOrder) 
             {
                 case "name_desc":
                     devices = devices.OrderByDescending( d => d.Name);
                     break;
                 default:
-                    devices = devices.OrderBy(_ => _.Name);
+                    devices = devices.OrderBy(d => d.Name);
                     break;
             }
             //количество записей на странице
