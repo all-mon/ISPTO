@@ -20,8 +20,31 @@
         </p>
     </div>
 </form>
+<a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Название</a>
+    @foreach (var item in Model)
+    {
+    <div class="card mb-3" >
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img src="images/default_item_icon.png" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <p class="card-text"><small class="text-muted">Просмотр документации</small></p>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
+                <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
+            </div>
+        </div>
+    </div>
+    }
 
-<table class="table">
+@*<table class="table">
     <thead>
         <tr>
             <th>
@@ -39,8 +62,10 @@
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
+    </thead>*@
+    
+    
+   @* <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -63,7 +88,7 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
