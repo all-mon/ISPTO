@@ -85,12 +85,14 @@ namespace Diplom.Controllers
         // GET: Devices/Create
         public IActionResult Create()
         {
-            return View();
+            var model = new Device();
+            model.Analogues = _context.Device.ToList();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,ImagePath,DocumentPath")] Device device)
+        public async Task<IActionResult> Create(Device device)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
@@ -110,6 +112,7 @@ namespace Diplom.Controllers
                     "Try again, and if the problem persists " +
                     "see your system administrator.");
             }
+            device.Analogues = _context.Device.ToList();
             return View(device);
         }
 

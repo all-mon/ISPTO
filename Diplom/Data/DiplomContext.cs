@@ -18,6 +18,7 @@ namespace Diplom.Data
         public DbSet<Placement> Placement { get; set; } 
         public DbSet<DevicePlacement> DevicePlacement { get; set; }
 
+
         public DbSet<Models.Task> Task { get; set; }
         public DbSet<Instruction> Instruction { get; set; }
         public DbSet<LogEntry> LogEntry { get; set; }
