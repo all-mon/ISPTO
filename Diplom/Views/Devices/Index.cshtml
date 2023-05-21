@@ -4,7 +4,7 @@
     ViewData["Title"] = "Оборудование";
 }
 
-<h1>Оборудование</h1>
+<h1>@ViewData["Test"]</h1>
 
 
 <p>
@@ -26,13 +26,13 @@
     <div class="card mb-3" >
         <div class="row g-0">
             <div class="col-md-2">
-                <img src="images/default_item_icon.png" class="img-fluid rounded-start" alt="...">
+                <img src="@item.ImagePath" class="img-fluid rounded-start " alt="..." width="50%">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <p class="card-text"><small class="text-muted">Просмотр документации</small></p>
+                    <p class="card-text"><small class="text-muted"><a href="@item.DocumentPath">Просмотр документации</a></small></p>
                 </div>
             </div>
             <div class="col-md-2">

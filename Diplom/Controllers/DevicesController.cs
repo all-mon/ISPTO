@@ -9,16 +9,20 @@ using Diplom.Data;
 using Diplom.Models;
 using System.Xml.Linq;
 using Diplom.Models.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace Diplom.Controllers
 {
     public class DevicesController : Controller
     {
         private readonly DiplomContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public DevicesController(DiplomContext context)
+        public DevicesController(DiplomContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Devices
@@ -26,7 +30,9 @@ namespace Diplom.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
-            
+            var wwwrootPath = _webHostEnvironment.WebRootPath;
+            ViewData["Test"] = wwwrootPath;
+
 
             if (searchString != null)
             {
@@ -99,6 +105,35 @@ namespace Diplom.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // Загрузка изображения
+                    if (device.ImageFile != null && device.ImageFile.Length > 0)
+                    {
+                        var imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(device.ImageFile.FileName);
+                        var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageFileName);
+
+                        using (var stream = new FileStream(imagePath, FileMode.Create))
+                        {
+                            await device.ImageFile.CopyToAsync(stream);
+                        }
+
+                        device.ImagePath = "/images/" + imageFileName;
+                    }
+
+                    // Загрузка документации
+                    if (device.DocumentationFile != null && device.DocumentationFile.Length > 0)
+                    {
+                        var docFileName = Guid.NewGuid().ToString() + Path.GetExtension(device.DocumentationFile.FileName);
+                        var docPath = Path.Combine(_webHostEnvironment.WebRootPath, "docs", docFileName);
+
+                        using (var stream = new FileStream(docPath, FileMode.Create))
+                        {
+                            await device.DocumentationFile.CopyToAsync(stream);
+                        }
+
+                        device.DocumentPath = "/docs/" + docFileName;
+                    }
+
+                    // Логика сохранения оборудования в базе данных
                     _context.Add(device);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));

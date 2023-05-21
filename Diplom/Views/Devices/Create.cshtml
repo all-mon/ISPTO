@@ -10,7 +10,7 @@
 <hr />
 
 
-<form asp-action="Create">
+<form enctype="multipart/form-data" asp-action="Create" method="post">
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
@@ -23,13 +23,15 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="ImagePath"></label>
-        <input asp-for="ImagePath" class="form-control" />
+        <label asp-for="ImageFile" class="control-label"></label>
+        <input asp-for="ImageFile" type="file" accept=".jpg, .png, .pdf" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="DocumentPath"></label>
-        <input asp-for="DocumentPath" class="form-control" />
+        <label asp-for="DocumentationFile" class="control-label"></label>
+        <input asp-for="DocumentationFile" type="file" accept=".jpg, .png, .pdf" class="form-control" />
+        <span asp-validation-for="DocumentationFile" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -46,11 +48,12 @@
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
-
 <div>
     <a asp-action="Index">Назад</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
