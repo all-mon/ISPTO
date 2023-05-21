@@ -24,6 +24,7 @@ namespace Diplom.Models
         [DisplayName("Аналоги")]
         public string? Analogue { get; set; }
         [DisplayName("Количество в запасе")]
+        [Required(ErrorMessage = "Укажите число")]
         public int QuantityInStock { get; set; }
 
         [DisplayName("Места установки")]
