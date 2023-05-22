@@ -11,7 +11,7 @@ namespace Diplom.Models
 
         [DisplayName("Название")]
         [Required(ErrorMessage = "Введите название")]
-        //[UniqueDevice(ErrorMessage = "Оборудование с таким названием уже существует.")]
+        [UniqueDevice(ErrorMessage = "Оборудование с таким названием уже существует.")]
         [MaxLength(100)]
         [MinLength(3)]
         public string Name { get; set; } = "Empty";
@@ -26,15 +26,15 @@ namespace Diplom.Models
 
         [DisplayName("Файл изображения")]
         [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         [DisplayName("Документация")]
         [MaxLength(255)]
-        public string? DocumentPath { get; set; } = "/docs/default_pdf_icon.pdf";
+        public string? DocumentPath { get; set; } = "/docs/default_item_pdf.pdf";
 
         [DisplayName("Файл документации")]
         [NotMapped]
-        public IFormFile DocumentationFile { get; set; }
+        public IFormFile? DocumentationFile { get; set; }
 
         [DisplayName("Количество в запасе")]
         [Required(ErrorMessage = "Укажите число")]

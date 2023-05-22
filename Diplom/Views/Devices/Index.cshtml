@@ -4,23 +4,28 @@
     ViewData["Title"] = "Оборудование";
 }
 
-<h1>@ViewData["Test"]</h1>
+<div class="border">
+    <h1>@ViewData["Test"]</h1>
 
 
-<p>
-    <a asp-action="Create">Добавить новое</a>
+    <p>
+        <a asp-action="Create">Добавить новое</a>
+    </p>
+
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Поиск: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                <input type="submit" value="Найти" class="btn btn-link" /> |
+                <a asp-action="Index">Весь список</a>
+            </p>
+        </div>
+    </form>
+</div>
+<p class="mb-2">
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" >Название</a>
 </p>
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Поиск: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Найти" class="btn btn-link" /> |
-            <a asp-action="Index">Весь список</a>
-        </p>
-    </div>
-</form>
-<a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Название</a>
     @foreach (var item in Model)
     {
     <div class="card mb-3" >
@@ -44,51 +49,7 @@
     </div>
     }
 
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Изображение
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Название</a>
-            </th>
-            <th>
-                Описание
-            </th>
-            
-            <th>
-                Документация
-            </th>
-            <th></th>
-        </tr>
-    </thead>*@
-    
-    
-   @* <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DocumentPath)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@
+
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";

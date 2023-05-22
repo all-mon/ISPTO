@@ -25,7 +25,7 @@ namespace Diplom.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Devices
+        //Главная GET: Devices
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -67,7 +67,7 @@ namespace Diplom.Controllers
 
         }
 
-        // GET: Devices/Details/5
+        //Подробнее GET: Devices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Device == null)
@@ -88,14 +88,16 @@ namespace Diplom.Controllers
             return View(device);
         }
 
-        // GET: Devices/Create
+        //Создать GET: Devices/Create
         public IActionResult Create()
         {
+            
             var model = new Device();
             model.Analogues = _context.Device.ToList();
             return View(model);
         }
 
+        //Создать POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Device device)
@@ -132,7 +134,7 @@ namespace Diplom.Controllers
 
                         device.DocumentPath = "/docs/" + docFileName;
                     }
-
+                    
                     // Логика сохранения оборудования в базе данных
                     _context.Add(device);
                     await _context.SaveChangesAsync();
@@ -147,10 +149,13 @@ namespace Diplom.Controllers
                     "Try again, and if the problem persists " +
                     "see your system administrator.");
             }
+            // Если модель невалидна, необходимо загрузить список мест установки
+            //ViewBag.Placements = _context.Placement.ToList();
             device.Analogues = _context.Device.ToList();
             return View(device);
         }
 
+        //Изменить
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Device == null)
@@ -167,6 +172,7 @@ namespace Diplom.Controllers
             return View(device);
         }
 
+        //Сохранение выбранных мест установки
         private void PopulateAssignedPlacementData(Device device)
         {
             var AllPlacement = _context.Placement;
