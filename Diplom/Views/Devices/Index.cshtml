@@ -4,8 +4,8 @@
     ViewData["Title"] = "Оборудование";
 }
 
-<div class="border">
-    <h1>@ViewData["Test"]</h1>
+<div class="p-3 border bg-light mb-4">
+    <h1>Просмотр оборудования</h1>
 
 
     <p>
@@ -16,13 +16,18 @@
         <div class="form-actions no-color">
             <p>
                 Поиск: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                <input type="submit" value="Найти" class="btn btn-link" /> |
-                <a asp-action="Index">Весь список</a>
+                
+                <button type="submit" class="btn btn-light">
+                    <i class="bi bi-search"></i>
+                </button>
+                | <a asp-action="Index" class="btn btn-light"><i class="bi bi-x-lg"></i></a>
+                
             </p>
+            
         </div>
     </form>
 </div>
-<p class="mb-2">
+<p class="mb-1">
     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" >Название</a>
 </p>
 
@@ -37,7 +42,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <p class="card-text"><small class="text-muted"><a href="@item.DocumentPath">Просмотр документации</a></small></p>
+                    <p class="card-text"><small class="text-muted"><a class="text-decoration-none text-reset" href="@item.DocumentPath">Просмотр документации</a></small></p>
                 </div>
             </div>
             <div class="col-md-2">

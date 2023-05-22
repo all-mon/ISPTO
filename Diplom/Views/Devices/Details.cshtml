@@ -26,13 +26,13 @@
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
+            <img src="@Model.ImagePath" class="img-fluid rounded-start " alt="..." width="20%">
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DocumentPath)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DocumentPath)
+            <a href="@Model.DocumentPath">Просмотр документации</a>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DevicePlacements)
