@@ -41,7 +41,7 @@ namespace Diplom.Models
         public int QuantityInStock { get; set; }
 
         [DisplayName("Места установки")]
-        public ICollection<DevicePlacement>? DevicePlacements { get; set; }
+        public ICollection<DevicePlacement> DevicePlacements { get; set; } = new List<DevicePlacement>();
 
         [DisplayName("Аналоги")]
         public ICollection<Device> Analogues { get; set; } = new List<Device>();

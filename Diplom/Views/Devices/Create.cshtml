@@ -39,13 +39,39 @@
         <input asp-for="QuantityInStock" class="form-control" />
         <span asp-validation-for="QuantityInStock" class="text-danger"></span>
     </div>
+    <div class="col-md-offset-2 col-md-10">
+        <label asp-for="DevicePlacements"></label>
+        <table>
+            <tr>
+                @{
+                    int cnt = 0;
+                    List<Diplom.Models.ViewModels.AssignedPlacementData> placements = ViewBag.AllPlacements;
 
-    <div class="form-group">
+                    foreach (var place in placements)
+                    {
+                        if (cnt++ % 3 == 0)
+                        {
+                            @:</tr><tr>
+                        }
+                        @:<td>
+                            <input type="checkbox"
+                                   name="selectedPlacements"
+                                   value="@place.PlacementID"
+                                   @(Html.Raw(place.Assigned ? "checked=\"checked\"" : "")) />
+                                     @place.Title
+                        @:</td>
+                    }
+                    @:</tr>
+                }
+        </table>
+    </div>
+
+    <div class="form-group mb-3">
         <label asp-for="Analogues"></label>
         <select asp-for="Analogues" asp-items="@Model.Analogues.Select(a => new SelectListItem { Value = a.ID.ToString(), Text = a.Name })" class="form-control" multiple></select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
 
 <div>

@@ -91,16 +91,19 @@ namespace Diplom.Controllers
         //Создать GET: Devices/Create
         public IActionResult Create()
         {
-            
+            //создать модель оборудования
             var model = new Device();
+            //Загрузить список возможных аналогов(подгружаем все устройства, для дальнейшего выбора)
             model.Analogues = _context.Device.ToList();
+            //Подгрузить все возможные места установки(для дальнейшего выбора)
+            PopulateAllPlacementData();
             return View(model);
         }
 
         //Создать POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Device device)
+        public async Task<IActionResult> Create(Device device, string[] selectedPlacements)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
@@ -137,6 +140,9 @@ namespace Diplom.Controllers
                     
                     // Логика сохранения оборудования в базе данных
                     _context.Add(device);
+                    UpdateDevicePlacements(selectedPlacements, device);
+                    PopulateAssignedPlacementData(device);
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -149,10 +155,26 @@ namespace Diplom.Controllers
                     "Try again, and if the problem persists " +
                     "see your system administrator.");
             }
-            // Если модель невалидна, необходимо загрузить список мест установки
-            //ViewBag.Placements = _context.Placement.ToList();
+            //сброс отмеченных аналогов
             device.Analogues = _context.Device.ToList();
             return View(device);
+        }
+
+        //Подгрузить все возможные места установки(для дальнейшего выбора)
+        private void PopulateAllPlacementData()
+        {
+            var AllPlacement = _context.Placement;
+            var viewModel = new List<AssignedPlacementData>();
+            foreach (var place in AllPlacement)
+            {
+                viewModel.Add(new AssignedPlacementData
+                {
+                    PlacementID = place.ID,
+                    Title = place.Name,
+                    Assigned = false
+                });
+            }
+            ViewData["AllPlacements"] = viewModel;
         }
 
         //Изменить
@@ -172,7 +194,7 @@ namespace Diplom.Controllers
             return View(device);
         }
 
-        //Сохранение выбранных мест установки
+        //Подгрузка выбранных мест установки, уже выбранные отмечены(поле Assigned)
         private void PopulateAssignedPlacementData(Device device)
         {
             var AllPlacement = _context.Placement;
@@ -204,7 +226,7 @@ namespace Diplom.Controllers
             if (await TryUpdateModelAsync<Device>(
                 deviceToUpdate! ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
             {
-                UpdateDevicePlacements(selectedPlacements,deviceToUpdate);
+                UpdateDevicePlacements(selectedPlacements,deviceToUpdate!);
                 PopulateAssignedPlacementData(deviceToUpdate!);
 
                 try
@@ -220,11 +242,14 @@ namespace Diplom.Controllers
                         "see your system administrator.");
                 }
             }
-            UpdateDevicePlacements (selectedPlacements, deviceToUpdate);
-            PopulateAssignedPlacementData (deviceToUpdate);
+            UpdateDevicePlacements (selectedPlacements, deviceToUpdate!);
+            PopulateAssignedPlacementData (deviceToUpdate!);
             return View(deviceToUpdate);
         }
+        private void SavePlacementForNewDevice(string[] selectedPlacements, Device device)
+        {
 
+        }
         private void UpdateDevicePlacements(string[] selectedPlacements, Device deviceToUpdate)
         {
             if (selectedPlacements == null)
@@ -234,7 +259,7 @@ namespace Diplom.Controllers
             }
 
             var selectedPlacementsHS = new HashSet<string>(selectedPlacements);
-            var devicePlacementsHS = new HashSet<int>(deviceToUpdate!.DevicePlacements!.Select(p=>p.Placement.ID));
+            var devicePlacementsHS = new HashSet<int>(deviceToUpdate.DevicePlacements.Select(p=>p.Placement.ID));
 
             foreach (var place in _context.Placement)
             {
