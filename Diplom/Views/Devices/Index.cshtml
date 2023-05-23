@@ -27,6 +27,7 @@
         </div>
     </form>
 </div>
+
 <p class="mb-1">
     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" >Название</a>
 </p>
@@ -42,7 +43,8 @@
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <p class="card-text"><small class="text-muted"><a class="text-decoration-none text-reset" href="@item.DocumentPath">Просмотр документации</a></small></p>
+                    <p class="card-text"><small class="text-muted"><a class="text-decoration-none text-reset" href="@item.DocumentPath">
+                        <i class="bi bi-filetype-pdf"></i>Просмотр документации</a></small></p>
                 </div>
             </div>
             <div class="col-md-2">

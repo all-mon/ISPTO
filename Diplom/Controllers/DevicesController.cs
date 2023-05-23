@@ -79,11 +79,13 @@ namespace Diplom.Controllers
                 .FirstOrDefaultAsync(m => m.ID == id);*/
             var device = await _context.Device.Include(d => d.DevicePlacements)!.ThenInclude(dp => dp.Placement).AsNoTracking().
                 FirstOrDefaultAsync(p => p.ID == id);
-
+            
             if (device == null)
             {
                 return NotFound();
             }
+
+            ViewData["deviceAnalogues"] = device.Analogues;
 
             return View(device);
         }
@@ -110,6 +112,8 @@ namespace Diplom.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    device.Analogues = _context.Device.Where(d => device.SelectedAnalogues.Contains(d.ID)).ToList();
+
                     // Загрузка изображения
                     if (device.ImageFile != null && device.ImageFile.Length > 0)
                     {
@@ -157,6 +161,7 @@ namespace Diplom.Controllers
             }
             //сброс отмеченных аналогов
             device.Analogues = _context.Device.ToList();
+            PopulateAllPlacementData();
             return View(device);
         }
 
@@ -246,10 +251,7 @@ namespace Diplom.Controllers
             PopulateAssignedPlacementData (deviceToUpdate!);
             return View(deviceToUpdate);
         }
-        private void SavePlacementForNewDevice(string[] selectedPlacements, Device device)
-        {
-
-        }
+     
         private void UpdateDevicePlacements(string[] selectedPlacements, Device deviceToUpdate)
         {
             if (selectedPlacements == null)

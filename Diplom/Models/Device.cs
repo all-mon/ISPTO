@@ -38,13 +38,18 @@ namespace Diplom.Models
 
         [DisplayName("Количество в запасе")]
         [Required(ErrorMessage = "Укажите число")]
+        [Range(0,1000,ErrorMessage ="Недопустимое количество")]
         public int QuantityInStock { get; set; }
 
         [DisplayName("Места установки")]
         public ICollection<DevicePlacement> DevicePlacements { get; set; } = new List<DevicePlacement>();
 
         [DisplayName("Аналоги")]
-        public ICollection<Device> Analogues { get; set; } = new List<Device>();
+        public ICollection<Device>? Analogues { get; set; } = new List<Device>();
+
+        [DisplayName("Аналоги")]
+        [NotMapped]
+        public List<int> SelectedAnalogues { get; set; } = new List<int>();
     }
 }
 

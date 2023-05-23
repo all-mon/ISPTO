@@ -16,24 +16,28 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             <img src="@Model.ImagePath" class="img-fluid rounded-start " alt="..." width="20%">
         </dd>
+       
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DocumentPath)
         </dt>
         <dd class = "col-sm-10">
             <a href="@Model.DocumentPath">Просмотр документации</a>
         </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DevicePlacements)
         </dt>
@@ -55,6 +59,21 @@
                     </tr>
                 }
             </table>
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Analogues)
+        </dt>
+        <dd class="col-sm-10">
+
+            @{
+                List<Diplom.Models.Device> deviceAnalogues = ViewBag.deviceAnalogues;
+               
+                    @foreach (var item in deviceAnalogues)
+                    {
+                        @Html.DisplayNameFor(i => item)
+                    }
+                }
         </dd>
     </dl>
 </div>
