@@ -85,7 +85,7 @@ namespace Diplom.Controllers
                 return NotFound();
             }
 
-            ViewData["deviceAnalogues"] = device.Analogues;
+            //ViewData["deviceAnalogues"] = device.Analogues;
 
             return View(device);
         }
@@ -94,25 +94,32 @@ namespace Diplom.Controllers
         public IActionResult Create()
         {
             //создать модель оборудования
-            var model = new Device();
-            //Загрузить список возможных аналогов(подгружаем все устройства, для дальнейшего выбора)
-            model.Analogues = _context.Device.ToList();
+            //var model = new Device();
+
+            PopulateAnalogDevicesDropDownList();
+
             //Подгрузить все возможные места установки(для дальнейшего выбора)
             PopulateAllPlacementData();
-            return View(model);
+            return View();
+        }
+
+        private void PopulateAnalogDevicesDropDownList()
+        {
+            var devices = _context.Device.OrderBy(d => d.Name).ToList();
+            ViewBag.AnalogDevices = new SelectList(devices, "ID", "Name");
         }
 
         //Создать POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Device device, string[] selectedPlacements)
+        public async Task<IActionResult> Create(Device device, string[] selectedPlacements, int[] selectedAnalogDevices)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
             try
             {
                 if (ModelState.IsValid)
                 {
-                    device.Analogues = _context.Device.Where(d => device.SelectedAnalogues.Contains(d.ID)).ToList();
+                    //device.Analogues = _context.Device.Where(d => device.SelectedAnalogues.Contains(d.ID)).ToList();
 
                     // Загрузка изображения
                     if (device.ImageFile != null && device.ImageFile.Length > 0)
@@ -148,6 +155,18 @@ namespace Diplom.Controllers
                     PopulateAssignedPlacementData(device);
 
                     await _context.SaveChangesAsync();
+
+                    if (selectedAnalogDevices != null)
+                    {
+                        foreach (int analogDeviceId in selectedAnalogDevices)
+                        {
+                            // Создаем связь "многие ко многим" и добавляем ее в контекст базы данных
+                            AnalogDevice analogDevice = new AnalogDevice { DeviceId = device.ID, AnalogId = analogDeviceId };
+                            _context.AnalogDevice.Add(analogDevice);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -160,8 +179,9 @@ namespace Diplom.Controllers
                     "see your system administrator.");
             }
             //сброс отмеченных аналогов
-            device.Analogues = _context.Device.ToList();
+           // device.Analogues = _context.Device.ToList();
             PopulateAllPlacementData();
+            PopulateAnalogDevicesDropDownList();
             return View(device);
         }
 

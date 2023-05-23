@@ -22,6 +22,21 @@ namespace Diplom.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Diplom.Models.AnalogDevice", b =>
+                {
+                    b.Property<int>("DeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AnalogId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DeviceId", "AnalogId");
+
+                    b.HasIndex("AnalogId");
+
+                    b.ToTable("AnalogDevice");
+                });
+
             modelBuilder.Entity("Diplom.Models.Device", b =>
                 {
                     b.Property<int>("ID")
@@ -33,9 +48,6 @@ namespace Diplom.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<int?>("DeviceID")
-                        .HasColumnType("int");
 
                     b.Property<string>("DocumentPath")
                         .HasMaxLength(255)
@@ -54,8 +66,6 @@ namespace Diplom.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("DeviceID");
 
                     b.ToTable("Device");
                 });
@@ -174,11 +184,23 @@ namespace Diplom.Migrations
                     b.ToTable("Task");
                 });
 
-            modelBuilder.Entity("Diplom.Models.Device", b =>
+            modelBuilder.Entity("Diplom.Models.AnalogDevice", b =>
                 {
-                    b.HasOne("Diplom.Models.Device", null)
-                        .WithMany("Analogues")
-                        .HasForeignKey("DeviceID");
+                    b.HasOne("Diplom.Models.Device", "Analog")
+                        .WithMany()
+                        .HasForeignKey("AnalogId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Diplom.Models.Device", "Device")
+                        .WithMany("AnalogDevice")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Analog");
+
+                    b.Navigation("Device");
                 });
 
             modelBuilder.Entity("Diplom.Models.DevicePlacement", b =>
@@ -202,7 +224,7 @@ namespace Diplom.Migrations
 
             modelBuilder.Entity("Diplom.Models.Device", b =>
                 {
-                    b.Navigation("Analogues");
+                    b.Navigation("AnalogDevice");
 
                     b.Navigation("DevicePlacements");
                 });

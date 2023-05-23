@@ -15,6 +15,7 @@ namespace Diplom.Data
         }
 
         public DbSet<Device> Device { get; set; }
+        public DbSet<AnalogDevice> AnalogDevice { get; set; }
         public DbSet<Placement> Placement { get; set; } 
         public DbSet<DevicePlacement> DevicePlacement { get; set; }
 
@@ -29,6 +30,21 @@ namespace Diplom.Data
 
             modelBuilder.Entity<DevicePlacement>()
                 .HasKey(c => new { c.DeviceID, c.PlacementID });
+
+            modelBuilder.Entity<AnalogDevice>()
+        .HasKey(ad => new { ad.DeviceId, ad.AnalogId });
+
+            modelBuilder.Entity<AnalogDevice>()
+                .HasOne(ad => ad.Device)
+                .WithMany(d => d.AnalogDevice)
+                .HasForeignKey(ad => ad.DeviceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AnalogDevice>()
+                .HasOne(ad => ad.Analog)
+                .WithMany()
+                .HasForeignKey(ad => ad.AnalogId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
