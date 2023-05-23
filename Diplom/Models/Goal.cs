@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Diplom.Models
 {
-    public class Task
+    public class Goal
     {
         public int ID { get; set; }
         [DisplayName("Название")]

@@ -34,7 +34,7 @@ namespace Diplom.Migrations
 
                     b.HasIndex("AnalogId");
 
-                    b.ToTable("AnalogDevice");
+                    b.ToTable("AnalogDevice", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.Device", b =>
@@ -67,7 +67,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Device");
+                    b.ToTable("Device", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.DevicePlacement", b =>
@@ -82,7 +82,7 @@ namespace Diplom.Migrations
 
                     b.HasIndex("PlacementID");
 
-                    b.ToTable("DevicePlacement");
+                    b.ToTable("DevicePlacement", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.Instruction", b =>
@@ -105,7 +105,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instruction");
+                    b.ToTable("Instruction", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.LogEntry", b =>
@@ -135,7 +135,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("LogEntry");
+                    b.ToTable("LogEntry", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.Placement", b =>
@@ -155,7 +155,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Placement");
+                    b.ToTable("Placement", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.Task", b =>
@@ -181,7 +181,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Task");
+                    b.ToTable("Task", (string)null);
                 });
 
             modelBuilder.Entity("Diplom.Models.AnalogDevice", b =>

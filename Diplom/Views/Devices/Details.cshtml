@@ -60,21 +60,13 @@
                 }
             </table>
         </dd>
-
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model)
+            @Html.DisplayNameFor(m=>m.AnalogDevice)
         </dt>
         <dd class="col-sm-10">
-
-            @{
-                List<Diplom.Models.Device> deviceAnalogues = ViewBag.deviceAnalogues;
-               
-                    @foreach (var item in deviceAnalogues)
-                    {
-                        @Html.DisplayNameFor(i => item)
-                    }
-                }
+            
         </dd>
+        
     </dl>
 </div>
 <div>

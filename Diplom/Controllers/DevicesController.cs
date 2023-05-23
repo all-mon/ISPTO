@@ -102,7 +102,7 @@ namespace Diplom.Controllers
             PopulateAllPlacementData();
             return View();
         }
-
+        //Селект со всеми устройсвами(для выбора аналогов)
         private void PopulateAnalogDevicesDropDownList()
         {
             var devices = _context.Device.OrderBy(d => d.Name).ToList();
@@ -185,7 +185,7 @@ namespace Diplom.Controllers
             return View(device);
         }
 
-        //Подгрузить все возможные места установки(для дальнейшего выбора)
+        //Создает List<AssignedPlacementData>, где все места установки c флагом false(чистый список), добавляет его в ViewData
         private void PopulateAllPlacementData()
         {
             var AllPlacement = _context.Placement;
@@ -202,7 +202,7 @@ namespace Diplom.Controllers
             ViewData["AllPlacements"] = viewModel;
         }
 
-        //Изменить
+        //Изменить GET
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Device == null)
@@ -210,13 +210,38 @@ namespace Diplom.Controllers
                 return NotFound();
             }
 
-            var device = await _context.Device.Include(d => d.DevicePlacements).ThenInclude(i => i.Placement).AsNoTracking().FirstOrDefaultAsync(s=>s.ID == id);  
+            var device = await _context.Device
+            .Include(d => d.AnalogDevice)
+                .ThenInclude(ad => ad.Analog)
+            .Include(d => d.DevicePlacements)
+                .ThenInclude(dp => dp.Placement)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(d => d.ID == id);
+
             if (device == null)
             {
                 return NotFound();
             }
             PopulateAssignedPlacementData(device);
+            await PopulateAnalogDevicesDropDownListAsync(device);
             return View(device);
+        }
+        //Селект для метода Edit, с уже выбранными ранее местами установки
+        private async Task PopulateAnalogDevicesDropDownListAsync(Device device)
+        {
+            var devices = await _context.Device.ToListAsync();
+            var selectedAnalogDevices = device.AnalogDevice.Select(ad => ad.AnalogId).ToList();
+            var selectList = new SelectList(devices, "ID", "Name");
+
+            foreach (var item in selectList)
+            {
+                int itemID =  Int32.Parse(item.Value);
+                if (selectedAnalogDevices.Contains(itemID))
+                {
+                    item.Selected = true;
+                }
+            }
+            ViewBag.AnalogDevices = selectList;
         }
 
         //Подгрузка выбранных мест установки, уже выбранные отмечены(поле Assigned)
@@ -239,20 +264,29 @@ namespace Diplom.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements)
+        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements, string[] selectedAnalogDevices)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var deviceToUpdate = await _context.Device.Include(d => d.DevicePlacements)
-                .ThenInclude(p=>p.Placement).FirstOrDefaultAsync(d=>d.ID == id);
+            /*var deviceToUpdate = await _context.Device
+                .Include(d => d.DevicePlacements)
+                .ThenInclude(p=>p.Placement)
+                .FirstOrDefaultAsync(d=>d.ID == id);*/
+            var deviceToUpdate = await _context.Device
+            .Include(d => d.AnalogDevice)
+                .ThenInclude(ad => ad.Analog)
+            .Include(d => d.DevicePlacements)
+                .ThenInclude(dp => dp.Placement)
+            .FirstOrDefaultAsync(d => d.ID == id);
 
             if (await TryUpdateModelAsync<Device>(
                 deviceToUpdate! ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
             {
                 UpdateDevicePlacements(selectedPlacements,deviceToUpdate!);
-                PopulateAssignedPlacementData(deviceToUpdate!);
+                UpdateDeviceAnalogs(selectedAnalogDevices,deviceToUpdate!);
+
 
                 try
                 {
@@ -271,7 +305,41 @@ namespace Diplom.Controllers
             PopulateAssignedPlacementData (deviceToUpdate!);
             return View(deviceToUpdate);
         }
-     
+
+        private void UpdateDeviceAnalogs(string[] selectedAnalogDevices, Device deviceToUpdate)
+        {
+            if (selectedAnalogDevices == null)
+            {
+                deviceToUpdate!.AnalogDevice = new List<AnalogDevice>();
+                return;
+            }
+            var selectedAnalogsHS = new HashSet<string> (selectedAnalogDevices);
+            var deviceAnalogsHS = new HashSet<int>(deviceToUpdate.AnalogDevice.Select(a => a.AnalogId));
+
+            foreach (var device in _context.Device)
+            {
+                if (selectedAnalogDevices.Contains(device.ID.ToString()))
+                {
+                    if (!deviceAnalogsHS.Contains(device.ID))
+                    {
+                        deviceToUpdate.AnalogDevice!.Add(new AnalogDevice
+                        {
+                            AnalogId = device.ID,
+                            DeviceId = deviceToUpdate.ID
+                        });
+                    }
+                }
+                else
+                {
+                    if (deviceAnalogsHS.Contains(device.ID))
+                    {
+                        AnalogDevice dpToRemove = deviceToUpdate.AnalogDevice!.FirstOrDefault(i => i.AnalogId == device.ID)!;
+                        _context.Remove(dpToRemove!);
+                    }
+                }
+            }
+        }
+
         private void UpdateDevicePlacements(string[] selectedPlacements, Device deviceToUpdate)
         {
             if (selectedPlacements == null)

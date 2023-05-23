@@ -45,7 +45,7 @@ namespace Diplom.Models
         public ICollection<DevicePlacement> DevicePlacements { get; set; } = new List<DevicePlacement>();
 
         [DisplayName("Аналоги")]
-        public ICollection<AnalogDevice>? AnalogDevice { get; set; } = new List<AnalogDevice>();
+        public ICollection<AnalogDevice> AnalogDevice { get; set; } = new List<AnalogDevice>();
 
     }
 }
