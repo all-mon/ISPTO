@@ -34,7 +34,7 @@ namespace Diplom.Migrations
 
                     b.HasIndex("AnalogId");
 
-                    b.ToTable("AnalogDevice", (string)null);
+                    b.ToTable("AnalogDevice");
                 });
 
             modelBuilder.Entity("Diplom.Models.Device", b =>
@@ -67,7 +67,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Device", (string)null);
+                    b.ToTable("Device");
                 });
 
             modelBuilder.Entity("Diplom.Models.DevicePlacement", b =>
@@ -82,7 +82,33 @@ namespace Diplom.Migrations
 
                     b.HasIndex("PlacementID");
 
-                    b.ToTable("DevicePlacement", (string)null);
+                    b.ToTable("DevicePlacement");
+                });
+
+            modelBuilder.Entity("Diplom.Models.Goal", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("Diplom.Models.Instruction", b =>
@@ -105,7 +131,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Instruction", (string)null);
+                    b.ToTable("Instruction");
                 });
 
             modelBuilder.Entity("Diplom.Models.LogEntry", b =>
@@ -135,7 +161,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("LogEntry", (string)null);
+                    b.ToTable("LogEntry");
                 });
 
             modelBuilder.Entity("Diplom.Models.Placement", b =>
@@ -155,33 +181,7 @@ namespace Diplom.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Placement", (string)null);
-                });
-
-            modelBuilder.Entity("Diplom.Models.Task", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Task", (string)null);
+                    b.ToTable("Placement");
                 });
 
             modelBuilder.Entity("Diplom.Models.AnalogDevice", b =>
@@ -195,7 +195,7 @@ namespace Diplom.Migrations
                     b.HasOne("Diplom.Models.Device", "Device")
                         .WithMany("AnalogDevice")
                         .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Analog");

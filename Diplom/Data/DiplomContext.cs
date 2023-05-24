@@ -32,19 +32,26 @@ namespace Diplom.Data
                 .HasKey(c => new { c.DeviceID, c.PlacementID });
 
             modelBuilder.Entity<AnalogDevice>()
-        .HasKey(ad => new { ad.DeviceId, ad.AnalogId });
+                .HasKey(ad => new { ad.DeviceId, ad.AnalogId });
 
             modelBuilder.Entity<AnalogDevice>()
-                .HasOne(ad => ad.Device)
-                .WithMany(d => d.AnalogDevice)
-                .HasForeignKey(ad => ad.DeviceId)
-                .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(ad => ad.Device)
+            .WithMany(d => d.AnalogDevice)
+            .HasForeignKey(ad => ad.DeviceId)
+            .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<AnalogDevice>()
                 .HasOne(ad => ad.Analog)
                 .WithMany()
                 .HasForeignKey(ad => ad.AnalogId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Device>()
+                .HasMany(d => d.AnalogDevice)
+                .WithOne(a => a.Device)
+                .HasForeignKey(a => a.DeviceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

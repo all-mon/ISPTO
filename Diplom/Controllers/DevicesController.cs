@@ -475,19 +475,41 @@ namespace Diplom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Device.FindAsync(id);
-            if (student == null)
+            
+
+            var device = await _context.Device
+            .FirstAsync(d => d.ID == id);
+
+            if (device == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
+            var analogDevices = _context.AnalogDevice
+            .Where(ad => ad.DeviceId == id)
+            .ToList();
+
+            var entriesWhereDeviceIsAnalog = _context.AnalogDevice
+                .Where(ad => ad.AnalogId == id)
+                .ToList();
+
             try
             {
-                _context.Device.Remove(student);
+                // Удаляем связанные аналоги устройства
+                foreach (var analogDevice in analogDevices)
+                {
+                    _context.AnalogDevice.Remove(analogDevice);
+                }
+                // Удаляем записи где устройство является аналогом
+                foreach (var entry in entriesWhereDeviceIsAnalog)
+                {
+                    _context.AnalogDevice.Remove(entry);
+                }
+                _context.Device.Remove(device);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException /* ex */)
+            catch (DbUpdateException  ex )
             {
                 //Log the error (uncomment ex variable name and write a log.)
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });

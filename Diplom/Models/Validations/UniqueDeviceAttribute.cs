@@ -5,10 +5,10 @@ namespace Diplom.Models.Validations
 {
     public class UniqueDeviceAttribute:ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
            
-            var context = (DiplomContext)validationContext.GetService(typeof(DiplomContext));
+            var context = validationContext.GetService(typeof(DiplomContext)) as DiplomContext;
             var device = (Device)validationContext.ObjectInstance;
 
             if (context.Device.Any(d => d.Name == device.Name && d.ID != device.ID))
