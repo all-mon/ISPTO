@@ -75,9 +75,13 @@ namespace Diplom.Controllers
                 return NotFound();
             }
 
-            /*var device = await _context.Device
-                .FirstOrDefaultAsync(m => m.ID == id);*/
-            var device = await _context.Device.Include(d => d.DevicePlacements)!.ThenInclude(dp => dp.Placement).AsNoTracking().
+            
+            var device = await _context.Device
+                .Include(d  => d.AnalogDevice)
+                    .ThenInclude(a => a.Analog)
+                .Include(d => d.DevicePlacements)!
+                    .ThenInclude(dp => dp.Placement)
+                .AsNoTracking().
                 FirstOrDefaultAsync(p => p.ID == id);
             
             if (device == null)
@@ -264,16 +268,14 @@ namespace Diplom.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements, string[] selectedAnalogDevices)
+        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements,
+            string[] selectedAnalogDevices,
+            IFormFile? imageFile, IFormFile? documentationFile)
         {
             if (id == null)
             {
                 return NotFound();
-            }
-            /*var deviceToUpdate = await _context.Device
-                .Include(d => d.DevicePlacements)
-                .ThenInclude(p=>p.Placement)
-                .FirstOrDefaultAsync(d=>d.ID == id);*/
+            }            
             var deviceToUpdate = await _context.Device
             .Include(d => d.AnalogDevice)
                 .ThenInclude(ad => ad.Analog)
@@ -282,8 +284,29 @@ namespace Diplom.Controllers
             .FirstOrDefaultAsync(d => d.ID == id);
 
             if (await TryUpdateModelAsync<Device>(
-                deviceToUpdate! ,"", d => d.Name, d => d.Description, d => d.ImagePath, d => d.DocumentPath))
+                deviceToUpdate! ,"", d => d.Name, d => d.Description, d=>d.QuantityInStock) && deviceToUpdate != null)
             {
+                string oldImagePath = deviceToUpdate.ImagePath!;
+                string oldDocPath = deviceToUpdate.DocumentPath!;
+
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // Загрузка нового изображения и сохранение его на сервере
+                    string newImagePath = SaveImage(imageFile);
+
+                    // Обновление поля ImagePath в объекте Device
+                    deviceToUpdate.ImagePath = newImagePath;
+
+                    // Удаление старого изображения
+                    DeleteOldImage(oldImagePath);
+                }
+                if(documentationFile != null && documentationFile.Length > 0)
+                {
+                    string newDocumentationPath = SaveDocumentation(documentationFile);
+                    deviceToUpdate.DocumentPath = newDocumentationPath;
+                    DeleteOldDocumentation(oldDocPath);
+                }
+
                 UpdateDevicePlacements(selectedPlacements,deviceToUpdate!);
                 UpdateDeviceAnalogs(selectedAnalogDevices,deviceToUpdate!);
 
@@ -304,6 +327,54 @@ namespace Diplom.Controllers
             UpdateDevicePlacements (selectedPlacements, deviceToUpdate!);
             PopulateAssignedPlacementData (deviceToUpdate!);
             return View(deviceToUpdate);
+        }
+
+        private void DeleteOldDocumentation(string oldDocPath)
+        {
+            if (oldDocPath != null && oldDocPath != "/docs/default_item_pdf.pdf")
+            {
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, oldDocPath.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+        }
+
+        private string SaveDocumentation(IFormFile documentationFile)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "docs");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + documentationFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                documentationFile.CopyTo(fileStream);
+            }
+            return "/docs/" + uniqueFileName;
+        }
+
+        private void DeleteOldImage(string imagePath)
+        {
+            if (imagePath != null && imagePath != "/images/default_item_icon.png")
+            {
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+        }
+
+        private string SaveImage(IFormFile imageFile)
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                imageFile.CopyTo(fileStream);
+            }
+            return "/images/" + uniqueFileName;
         }
 
         private void UpdateDeviceAnalogs(string[] selectedAnalogDevices, Device deviceToUpdate)

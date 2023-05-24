@@ -66,10 +66,10 @@
         </table>
     </div>
 
-    <div class="form-group">
-    <label asp-for="AnalogDevice">Analog Devices:</label>
+    <div class="form-group mb-3">
+    <label asp-for="AnalogDevice">Выбор аналогов:</label>
     <select name="selectedAnalogDevices" asp-items="@ViewBag.AnalogDevices" class="form-control" multiple>
-        <option value="">-- Select Analog Devices --</option>
+        <option value="">-- Нет аналогов --</option>
     </select>
     <span asp-validation-for="AnalogDevice" class="text-danger"></span>
     </div>

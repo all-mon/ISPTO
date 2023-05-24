@@ -1,13 +1,13 @@
 ﻿@model Diplom.Models.Device
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Описание оборудования";
 }
 
-<h1>Details</h1>
+<h1>Характеристики оборудования</h1>
 
 <div>
-    <h4>Device</h4>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -28,7 +28,13 @@
             @Html.DisplayNameFor(model => model.DocumentPath)
         </dt>
         <dd class = "col-sm-10">
-            <a href="@Model.DocumentPath">Просмотр документации</a>
+            <p class="card-text">
+                <small class="text-muted">
+                    <a class="text-decoration-none text-reset" href="@Model.DocumentPath">
+                        <i class="bi bi-filetype-pdf"></i>Просмотр документации
+                    </a>
+                </small>
+            </p>
         </dd>
 
         <dt class="col-sm-2">
@@ -64,12 +70,25 @@
             @Html.DisplayNameFor(m=>m.AnalogDevice)
         </dt>
         <dd class="col-sm-10">
-            
+            @foreach (var a in Model.AnalogDevice)
+            {
+
+                <div>
+                    @Html.DisplayFor(d => a.Analog.Name) 
+                </div>
+               
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m=>m.QuantityInStock)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m=>m.QuantityInStock)
         </dd>
         
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Редактировать</a> |
+    <a asp-action="Index">К списку</a>
 </div>

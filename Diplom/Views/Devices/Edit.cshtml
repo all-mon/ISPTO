@@ -10,32 +10,35 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input asp-for="ImagePath" class="form-control" />
-                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile" class="control-label">Изображение</label><br>
+                <input type="hidden" asp-for="ImagePath" />
+                <input asp-for="ImageFile" type="file" class="form-control-file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DocumentPath" class="control-label"></label>
-                <input asp-for="DocumentPath" class="form-control" />
-                <span asp-validation-for="DocumentPath" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label asp-for="DocumentationFile" class="control-label">Документация</label><br>
+                <input type="hidden" asp-for="DocumentPath" />
+                <input asp-for="DocumentationFile" type="file" class="form-control-file" />
+                <span asp-validation-for="DocumentationFile" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <div class="col-md-offset-2 col-md-10">
+                    <label asp-for="DevicePlacements">Места установки:</label>
                     <table>
                         <tr>
                             @{
@@ -60,29 +63,33 @@
                             }
                     </table>
                 </div>
-
-
                 
             </div>
-            <div class="form-group">
-                    <label asp-for="AnalogDevice">Analog Devices:</label>
+            <div class="form-group mb-3">
+                    <label asp-for="AnalogDevice">Аналоги:</label>
                     <select name="selectedAnalogDevices" asp-items="@ViewBag.AnalogDevices" class="form-control" multiple>
                         <option value=""> Нет аналогов</option>
 
                     </select>
                     <span asp-validation-for="AnalogDevice" class="text-danger"></span>
             </div>
+            <div class="form-group mb-3">
+                <label asp-for="QuantityInStock"></label>
+                <input asp-for="QuantityInStock" class="form-control" />
+                <span asp-validation-for="QuantityInStock" class="text-danger"></span>
+             </div>
 
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" /> | 
+                <a asp-action="Index" class="btn btn-danger">Отменить</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Список оборудования</a>
-</div>
+
+    
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
