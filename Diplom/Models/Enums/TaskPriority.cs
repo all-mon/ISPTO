@@ -1,9 +1,14 @@
-﻿namespace Diplom.Models.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Diplom.Models.Enums
 {
    public enum TaskPriority
     {
-        Low, 
+        [Display(Name ="Низкий")]
+        Low,
+        [Display(Name = "Средний")]
         Medium,
+        [Display(Name = "Высокий")]
         High
     }
 }
