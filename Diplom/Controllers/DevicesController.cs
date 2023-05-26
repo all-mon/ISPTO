@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
-using System.Xml.Linq;
 using Diplom.Models.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 
 namespace Diplom.Controllers
 {
@@ -30,8 +23,7 @@ namespace Diplom.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
-            var wwwrootPath = _webHostEnvironment.WebRootPath;
-            ViewData["Test"] = wwwrootPath;
+            
 
 
             if (searchString != null)

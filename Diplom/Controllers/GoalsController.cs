@@ -20,11 +20,51 @@ namespace Diplom.Controllers
         }
 
         // GET: Goals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-              return _context.Task != null ? 
-                          View(await _context.Task.ToListAsync()) :
-                          Problem("Entity set 'DiplomContext.Task'  is null.");
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var tasks = from t in _context.Task select t;
+
+            //поиск по имени или описанию
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
+            }
+            //сортировка по имети/приоритету
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    tasks = tasks.OrderByDescending(t => t.Name);
+                    break;
+                case "Date":
+                    tasks = tasks.OrderBy(t => t.TaskDate);
+                    break;
+                case "date_desc":
+                    tasks = tasks.OrderByDescending(t => t.TaskDate);
+                    break;
+                default:
+                    tasks = tasks.OrderBy(t => t.Name);
+                    break;
+            }
+            //количество записей на странице
+            int pageSize = 12;
+            return View(await PaginatedList<Goal>.CreateAsync(tasks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Goals/Details/5

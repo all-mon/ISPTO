@@ -1,50 +1,161 @@
-﻿@model IEnumerable<Diplom.Models.Goal>
+﻿@model PaginatedList<Diplom.Models.Goal>
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+<div class="p-3 border bg-light mb-4">
+    <h1>Просмотр задач</h1>
+
+
+    <p>
+        <a asp-action="Create">Добавить задачу</a>
+    </p>
+
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Поиск: <input type="text" placeholder="название\описание" name="SearchString" value="@ViewData["CurrentFilter"]" />
+
+                <button type="submit" class="btn btn-light">
+                    <i class="bi bi-search"></i>
+                </button>
+                | <a asp-action="Index" class="btn btn-light"><i class="bi bi-x-lg"></i></a>
+
+            </p>
+
+        </div>
+    </form>
+</div>
+
+<div class="dropdown mb-1">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        Вариант сортировки
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">По названию</a></li>
+        <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате</a></li>
+    </ul>
+</div>
+
+<div class="row mb-3">
+@foreach(var item in Model)
+{
+        if ((int)item.Priority == 0)
+        {
+            <div class="col-md-3" >
+                <div class="card border-success mb-3">
+                    <div class="card-header  text-success border-success">
+                        <div>
+                            @Html.DisplayFor(modelItem => item.Priority) приоритет
+                        </div>
+                        <div class="position-absolute top-0 end-0">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Launch demo modal
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer border-success">
+                        <small class="text-muted">Задача запланирована на: @Html.DisplayFor(modelItem=>item.TaskDate)</small>
+                    </div>
+                </div>
+            </div>
+        }
+        else if ((int)item.Priority == 1)
+        {
+            <div class="col-md-3">
+                <div class="card border-primary mb-3">
+                    <div class="card-header border-primary  text-primary">
+                        <div>
+                            @Html.DisplayFor(modelItem => item.Priority) приоритет
+                        </div>
+                        <div class="position-absolute top-0 end-0">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    </div>
+                    <div class="card-footer border-primary">
+                        <small class="text-muted">Задача запланирована на: @Html.DisplayFor(modelItem=>item.TaskDate)</small>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-3">
+                <div class="card border-danger mb-3">
+                    <div class="card-header border-danger text-danger">
+                        <div>                        
+                             @Html.DisplayFor(modelItem => item.Priority) приоритет  
+                        </div>
+                        <div class="position-absolute top-0 end-0">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    </div>
+                    <div class="card-footer border-danger">
+                        <small class="text-muted">Задача запланирована на: @Html.DisplayFor(modelItem=>item.TaskDate)</small>
+                    </div>
+                    
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
-    </tbody>
-</table>
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Назад
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Следующая
+</a>
