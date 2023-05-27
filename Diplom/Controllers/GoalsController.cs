@@ -22,13 +22,18 @@ namespace Diplom.Controllers
         // GET: Goals
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            /*
+                        ViewData["CurrentSort"] = sortOrder;
+                        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+                        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+                        ViewData["IsCompletedSortParm"] = sortOrder == "CompletedTrue" ? "CompletedFalse" : "CompletedTrue";*/
 
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
+            ViewData["CurrentSort"] = sortOrder ?? "";
 
-
+            ViewData["NameSortParm"] = sortOrder == "name_asc" ? "name_desc" : "name_asc";
+            ViewData["DateSortParm"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewData["IsCompletedParm"] = sortOrder == "completed_true" ? "completed_false" : "completed_true";
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -47,7 +52,7 @@ namespace Diplom.Controllers
                 tasks = tasks.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
             }
             //сортировка по имети/приоритету
-            switch (sortOrder)
+            /*switch (sortOrder)
             {
                 case "name_desc":
                     tasks = tasks.OrderByDescending(t => t.Name);
@@ -58,10 +63,42 @@ namespace Diplom.Controllers
                 case "date_desc":
                     tasks = tasks.OrderByDescending(t => t.TaskDate);
                     break;
+                case "CompletedTrue":
+                    tasks = tasks.Where(t => t.IsCompleted);
+                    break;
+                case "CompletedFalse":
+                    tasks = tasks.Where(t => !t.IsCompleted);
+                    break;
                 default:
                     tasks = tasks.OrderBy(t => t.Name);
                     break;
+            }*/
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder.Contains("name"))
+                {
+                    tasks = sortOrder.EndsWith("_asc")
+                        ? tasks.OrderBy(t => t.Name)
+                        : tasks.OrderByDescending(t => t.Name);
+                }
+                if (sortOrder.Contains("date"))
+                {
+                    tasks = sortOrder.EndsWith("_asc")
+                        ? tasks.OrderBy(t => t.TaskDate)
+                        : tasks.OrderByDescending(t => t.TaskDate);
+                }
+                if (sortOrder.Contains("completed"))
+                {
+                    bool isCompleted = sortOrder.Contains("true");
+                    tasks = tasks.Where(t => t.IsCompleted == isCompleted);
+                }
             }
+            else
+            {
+                tasks = tasks.OrderBy(t => t.Name);
+            }
+
+
             //количество записей на странице
             int pageSize = 12;
             return View(await PaginatedList<Goal>.CreateAsync(tasks.AsNoTracking(), pageNumber ?? 1, pageSize));
@@ -128,7 +165,7 @@ namespace Diplom.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,CreatedDate,Priority")] Goal goal)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,TaskDate,Priority,IsCompleted")] Goal goal)
         {
             if (id != goal.ID)
             {
