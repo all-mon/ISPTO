@@ -75,6 +75,12 @@ namespace Diplom.Controllers
             }*/
             if (!string.IsNullOrEmpty(sortOrder))
             {
+                
+                if (sortOrder.Contains("completed"))
+                {
+                    bool isCompleted = sortOrder.Contains("true");
+                    tasks = tasks.Where(t => t.IsCompleted == isCompleted);
+                }
                 if (sortOrder.Contains("name"))
                 {
                     tasks = sortOrder.EndsWith("_asc")
@@ -86,11 +92,6 @@ namespace Diplom.Controllers
                     tasks = sortOrder.EndsWith("_asc")
                         ? tasks.OrderBy(t => t.TaskDate)
                         : tasks.OrderByDescending(t => t.TaskDate);
-                }
-                if (sortOrder.Contains("completed"))
-                {
-                    bool isCompleted = sortOrder.Contains("true");
-                    tasks = tasks.Where(t => t.IsCompleted == isCompleted);
                 }
             }
             else
