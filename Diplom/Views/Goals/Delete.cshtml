@@ -1,14 +1,14 @@
 ﻿@model Diplom.Models.Goal
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Удаление задачи";
 }
 
-<h1>Delete</h1>
+<h1>Удаление задачи</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы подтверждаете удаление?</h3>
 <div>
-    <h4>Goal</h4>
+    <h4>Задача</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -39,7 +39,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-success">Отмена</a>
     </form>
 </div>
