@@ -5,7 +5,7 @@ $(document).ready(function () {
         minHeight: 200,
 
         focus: true,
-        placeholder: '¬ведите данные',
+        
         toolbar: [
             //[groupname,[list buttons]]
             ['insert', ['picture', 'link', 'video', 'table']],

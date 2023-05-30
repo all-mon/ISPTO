@@ -1,12 +1,10 @@
-﻿@model Diplom.Models.Instruction
+﻿@model Diplom.Models.LogEntry
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
 @{
-    ViewData["Title"] = "Создание инструкции";
+    ViewData["Title"] = "Создание записи";
 }
 
-<h2>Создание инструкции</h2>
-
-@*<h4>Instruction</h4>*@
+<h1>Создание записи</h1>
 <hr />
 <div class="row">
     <div class="col">
@@ -19,13 +17,23 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+                <textarea asp-for="Description" id="summernote" class="form-control" ></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="Content" class="form-label"></label>
-                <textarea asp-for="Content" id="summernote" class="form-control"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
+                <label asp-for="CreatedDate" class="form-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Executor" class="form-label"></label>
+                <input asp-for="Executor" class="form-control" />
+                <span asp-validation-for="Executor" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <input type="submit" value="Создать" class="btn btn-primary" /> | <a asp-action="Index" class="btn btn-danger">Отмена</a>
@@ -33,6 +41,7 @@
         </form>
     </div>
 </div>
+
 
 
 @section Scripts {

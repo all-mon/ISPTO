@@ -1,0 +1,46 @@
+﻿@model Diplom.Models.LogEntry
+
+@{
+    ViewData["Title"] = "Просмотр записи";
+}
+
+<h1>Просмотр записи</h1>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Executor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Executor)
+        </dd>
+    </dl>
+    <hr />
+    @Html.Raw(Model.Description)
+    <hr />
+</div>
+<div>
+    <a asp-action="Edit" class="btn btn-outline-danger" asp-route-id="@Model?.ID">Редактировать</a> |
+    <a asp-action="Index" class="btn btn-outline-success">К журналу</a>
+</div>
