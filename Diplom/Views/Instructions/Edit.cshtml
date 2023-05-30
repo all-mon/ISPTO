@@ -3,32 +3,32 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
 <h1>Edit</h1>
 
 <h4>Instruction</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="8"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
+            <div class="form-group mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" id="summernote" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
@@ -40,5 +40,33 @@
 </div>
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/lang/summernote-ru-RU.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#summernote').summernote({
+                lang: 'ru-RU',
+                height: 300,
+                minHeight: 200,
+
+                focus: true,
+                placeholder: 'Введите данные',
+                toolbar: [
+                    //[groupname,[list buttons]]
+                    ['insert', ['picture', 'link', 'video', 'table']],
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['fontsize', ['fontsize', 'fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph', 'style']],
+                    ['height', ['height', 'codeview']],
+
+                ],
+                fontNames: ['Arial', 'Times New Roman', 'Verdana'],
+                disableDragAndDrop: true,
+            });
+        });
+    </script>
 }
