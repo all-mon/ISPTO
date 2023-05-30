@@ -1,12 +1,11 @@
 ﻿@model Diplom.Models.Instruction
-
-@{
-    ViewData["Title"] = "Edit";
-}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
-<h1>Edit</h1>
+@{
+    ViewData["Title"] = "Редактировать инструкцию";
+}
 
-<h4>Instruction</h4>
+<h1>Редактировать инструкцию</h1>
+
 <hr />
 <div class="row">
     <div class="col">
@@ -29,14 +28,10 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" /> | <a asp-action="Index" class="btn btn-danger">Отмена</a>
             </div>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    </div>   
 </div>
 
 @section Scripts {

@@ -1,11 +1,11 @@
 ﻿@model Diplom.Models.Instruction
 
 @{
-    ViewData["Title"] = "Просмотр статьи";
+    ViewData["Title"] = "Просмотр инструкции";
 }
 <div class="conteiner">
     <h1>@Html.DisplayFor(m=> m.Name)</h1>
-    <p><strong>Описание статьи: @Html.DisplayFor(m=> m.Description)</strong></p>
+    <p><strong>Описание: @Html.DisplayFor(m=> m.Description)</strong></p>
     <hr />
     <div>
         @Html.Raw(Model.Content)
