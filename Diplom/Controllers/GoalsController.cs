@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Diplom.Controllers
 {
+
     public class GoalsController : Controller
     {
         private readonly DiplomContext _context;
@@ -124,6 +127,7 @@ namespace Diplom.Controllers
         }
 
         // GET: Goals/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
            return View();
@@ -146,6 +150,7 @@ namespace Diplom.Controllers
         }
 
         // GET: Goals/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Task == null)
@@ -166,6 +171,7 @@ namespace Diplom.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,TaskDate,Priority,IsCompleted")] Goal goal)
         {
             if (id != goal.ID)
@@ -197,6 +203,7 @@ namespace Diplom.Controllers
         }
 
         // GET: Goals/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Task == null)
@@ -215,6 +222,7 @@ namespace Diplom.Controllers
         }
 
         // POST: Goals/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
