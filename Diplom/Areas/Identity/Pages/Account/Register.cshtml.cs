@@ -124,11 +124,11 @@ namespace Diplom.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    if (Input.Email == "i@admin.com")
+                   /* if (Input.Email == "i@admin.com")
                     {
                         await _roleManager.CreateAsync(new IdentityRole("Administrator"));
                         await _userManager.AddToRoleAsync(user, "Administrator");
-                    }
+                    }*/
 
 
                     _logger.LogInformation("User created a new account with password.");
