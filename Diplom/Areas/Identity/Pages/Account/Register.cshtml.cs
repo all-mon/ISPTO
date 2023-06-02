@@ -64,7 +64,7 @@ namespace Diplom.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Full name")]
+            [Display(Name = "ФИО")]
             public string FullName { get; set; }
 
             [Required]

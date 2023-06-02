@@ -12,9 +12,9 @@
             <h2>Создание аккаунта</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating">
-                <label asp-for="Input.FullName"></label>
-                <input asp-for="Input.FullName" class="form-control" />
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FullName" class="form-control" autocomplete="fullname" aria-required="true" placeholder="fullname" />
+                <label asp-for="Input.FullName">ФИО</label>
                 <span asp-validation-for="Input.FullName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
