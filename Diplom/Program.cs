@@ -8,15 +8,18 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Diplom.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DiplomContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DiplomContext") ?? throw new InvalidOperationException("Connection string 'DiplomContext' not found.")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<DiplomContext>();
+    .AddEntityFrameworkStores<DiplomContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 

@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Diplom.Data
 {
-    public class DiplomContext : IdentityDbContext
+    public class DiplomContext : IdentityDbContext<ApplicationUser>
     {
         public DiplomContext (DbContextOptions<DiplomContext> options)
             : base(options)
@@ -27,7 +27,7 @@ namespace Diplom.Data
         public DbSet<Instruction> Instruction { get; set; }
         public DbSet<LogEntry> LogEntry { get; set; }
 
-        public DbSet<IdentityUser> IdentityUser { get; set; }
+        public DbSet<ApplicationUser> IdentityUser { get; set; }
         public DbSet<IdentityRole> IdentityRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
