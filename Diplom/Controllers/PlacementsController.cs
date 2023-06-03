@@ -12,87 +12,88 @@ using System.Data;
 
 namespace Diplom.Controllers
 {
-    public class InstructionsController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class PlacementsController : Controller
     {
         private readonly DiplomContext _context;
 
-        public InstructionsController(DiplomContext context)
+        public PlacementsController(DiplomContext context)
         {
             _context = context;
         }
 
-        // GET: Instructions
-        [Authorize(Roles = "Employee, Administrator")]
+        // GET: Placements
         public async Task<IActionResult> Index()
         {
-              return _context.Instruction != null ? 
-                          View(await _context.Instruction.ToListAsync()) :
-                          Problem("Entity set 'DiplomContext.Instruction'  is null.");
+              return _context.Placement != null ? 
+                          View(await _context.Placement.ToListAsync()) :
+                          Problem("Entity set 'DiplomContext.Placement'  is null.");
         }
 
-        // GET: Instructions/Details/5
-        [Authorize(Roles = "Employee, Administrator")]
+        // GET: Placements/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Instruction == null)
+            if (id == null || _context.Placement == null)
             {
                 return NotFound();
             }
 
-            var instruction = await _context.Instruction
+            var placement = await _context.Placement
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (instruction == null)
+            if (placement == null)
             {
                 return NotFound();
             }
 
-            return View(instruction);
+            return View(placement);
         }
 
-        // GET: Instructions/Create
-        [Authorize(Roles = "Administrator")]
+        // GET: Placements/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Placements/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,Content")] Instruction instruction)
+        public async Task<IActionResult> Create([Bind("ID,Name,Description")] Placement placement)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(instruction);
+                _context.Add(placement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(instruction);
+            return View(placement);
         }
 
-        // GET: Instructions/Edit/5
-        [Authorize(Roles = "Administrator")]
+        // GET: Placements/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Instruction == null)
+            if (id == null || _context.Placement == null)
             {
                 return NotFound();
             }
 
-            var instruction = await _context.Instruction.FindAsync(id);
-            if (instruction == null)
+            var placement = await _context.Placement.FindAsync(id);
+            if (placement == null)
             {
                 return NotFound();
             }
-            return View(instruction);
+            return View(placement);
         }
 
+        // POST: Placements/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,Content")] Instruction instruction)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description")] Placement placement)
         {
-            if (id != instruction.ID)
+            if (id != placement.ID)
             {
                 return NotFound();
             }
@@ -101,12 +102,12 @@ namespace Diplom.Controllers
             {
                 try
                 {
-                    _context.Update(instruction);
+                    _context.Update(placement);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstructionExists(instruction.ID))
+                    if (!PlacementExists(placement.ID))
                     {
                         return NotFound();
                     }
@@ -117,51 +118,49 @@ namespace Diplom.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(instruction);
+            return View(placement);
         }
 
-        // GET: Instructions/Delete/5
-        [Authorize(Roles = "Administrator")]
+        // GET: Placements/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Instruction == null)
+            if (id == null || _context.Placement == null)
             {
                 return NotFound();
             }
 
-            var instruction = await _context.Instruction
+            var placement = await _context.Placement
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (instruction == null)
+            if (placement == null)
             {
                 return NotFound();
             }
 
-            return View(instruction);
+            return View(placement);
         }
 
-        // POST: Instructions/Delete/5
-        [Authorize(Roles = "Administrator")]
+        // POST: Placements/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Instruction == null)
+            if (_context.Placement == null)
             {
-                return Problem("Entity set 'DiplomContext.Instruction'  is null.");
+                return Problem("Entity set 'DiplomContext.Placement'  is null.");
             }
-            var instruction = await _context.Instruction.FindAsync(id);
-            if (instruction != null)
+            var placement = await _context.Placement.FindAsync(id);
+            if (placement != null)
             {
-                _context.Instruction.Remove(instruction);
+                _context.Placement.Remove(placement);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstructionExists(int id)
+        private bool PlacementExists(int id)
         {
-          return (_context.Instruction?.Any(e => e.ID == id)).GetValueOrDefault();
+          return (_context.Placement?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

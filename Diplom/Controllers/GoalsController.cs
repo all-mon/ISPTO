@@ -12,7 +12,7 @@ using System.Data;
 
 namespace Diplom.Controllers
 {
-
+    
     public class GoalsController : Controller
     {
         private readonly DiplomContext _context;
@@ -22,7 +22,9 @@ namespace Diplom.Controllers
             _context = context;
         }
 
+
         // GET: Goals
+        [Authorize(Roles = "Administrator, Employee")]
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             /*
@@ -109,6 +111,7 @@ namespace Diplom.Controllers
         }
 
         // GET: Goals/Details/5
+        [Authorize(Roles = "Administrator, Employee")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Task == null)
@@ -136,6 +139,7 @@ namespace Diplom.Controllers
         // POST: Goals/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,Description,TaskDate,Priority")] Goal goal)

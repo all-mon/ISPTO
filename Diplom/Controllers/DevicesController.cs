@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
 using Diplom.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Diplom.Controllers
 {
+    [Authorize(Roles = "Employee, Administrator")]
     public class DevicesController : Controller
     {
         private readonly DiplomContext _context;
@@ -19,6 +22,7 @@ namespace Diplom.Controllers
         }
 
         //Главная GET: Devices
+        
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -87,6 +91,7 @@ namespace Diplom.Controllers
         }
 
         //Создать GET: Devices/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             //создать модель оборудования
@@ -108,6 +113,7 @@ namespace Diplom.Controllers
         //Создать POST
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create(Device device, string[] selectedPlacements, int[] selectedAnalogDevices)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
@@ -199,6 +205,7 @@ namespace Diplom.Controllers
         }
 
         //Изменить GET
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Device == null)
@@ -225,7 +232,7 @@ namespace Diplom.Controllers
         //Селект для метода Edit, с уже выбранными ранее местами установки
         private async Task PopulateAnalogDevicesDropDownListAsync(Device device)
         {
-            var devices = await _context.Device.ToListAsync();
+            var devices = await _context.Device.Where(d => d.ID != device.ID).ToListAsync();
             var selectedAnalogDevices = device.AnalogDevice.Select(ad => ad.AnalogId).ToList();
             var selectList = new SelectList(devices, "ID", "Name");
 
@@ -260,6 +267,7 @@ namespace Diplom.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id, string[] selectedPlacements,
             string[] selectedAnalogDevices,
             IFormFile? imageFile, IFormFile? documentationFile)
@@ -440,6 +448,7 @@ namespace Diplom.Controllers
         }
 
         // GET: Devices/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null || _context.Device == null)
@@ -462,7 +471,7 @@ namespace Diplom.Controllers
 
             return View(device);
         }
-
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

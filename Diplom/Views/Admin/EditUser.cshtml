@@ -1,0 +1,46 @@
+﻿@model Diplom.Models.ApplicationUser
+
+
+
+<p>@Model.FullName</p>
+
+
+
+@{
+    ViewData["Title"] = "Редактирование задачи";
+}
+
+<h1>Редактирование пользователя</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUser">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Установить роль: </label>
+                <select asp-items="ViewBag.RoleSelectList" class="form-select" name="userRole">
+                    <option selected="selected" value="">--Не установленна--</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Отмена</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

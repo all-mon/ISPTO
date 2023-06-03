@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Diplom.Controllers
 {
+    [Authorize(Roles = "Employee, Administrator")]
     public class LogEntriesController : Controller
     {
         private readonly DiplomContext _context;
