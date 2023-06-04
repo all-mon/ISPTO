@@ -35,6 +35,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Instructions" asp-action="Index">Инструкции</a>
                         </li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Панель администратора
+                                    </a>
+
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <li><a class="nav-link text-danger" asp-area="" asp-controller="Placements" asp-action="Index">Системы</a></li>
+                                        <li><a class="nav-link text-danger" asp-area="" asp-controller="Admin" asp-action="GetUserList">Пользователи</a></li>
+                                    </ul>
+                                </div>
+                           
+                            </li>
+                        }
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

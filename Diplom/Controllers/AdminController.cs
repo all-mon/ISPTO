@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
 namespace Diplom.Controllers
@@ -38,39 +39,14 @@ namespace Diplom.Controllers
             
         }
 
-        // GET: AdminController/Details/5
-        public ActionResult Details(string id)
-        {
-           
-
-            return View();
-        }
-
-        // GET: AdminController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: AdminController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: AdminController/Edit/5
         public async Task<IActionResult> EditUser(string id)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
+            if (String.IsNullOrEmpty(id) || user == null)
+            {
+                return Problem("Id or user is null.");
+            }
             var roles = _roleManager.Roles.ToList();
             SelectList roleSelectList = new SelectList(roles);
             ViewBag.RoleSelectList = roleSelectList;
@@ -82,18 +58,31 @@ namespace Diplom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUserAsync(string id, string userRole)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
-            
 
-            try
+            if(!String.IsNullOrEmpty(id))
             {
-                await _userManager.AddToRoleAsync(user,userRole);
-                return RedirectToAction(nameof(GetUserList));
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                try
+                {
+                    if (!String.IsNullOrEmpty(userRole))
+                    {
+                        var ur = await _userManager.GetRolesAsync(user);
+                        await _userManager.RemoveFromRolesAsync(user,ur);
+                        await _userManager.AddToRoleAsync(user, userRole);
+                    }
+                        
+                  return RedirectToAction(nameof(GetUserList));
+                }
+                catch
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return NotFound();
         }
 
         // GET: AdminController/Delete/5
