@@ -86,19 +86,27 @@ namespace Diplom.Controllers
         }
 
         // GET: AdminController/Delete/5
-        public ActionResult Delete(int id)
+        
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            return View();
+            var user = await _userManager.FindByIdAsync(id);
+            return View(user);
         }
 
         // POST: AdminController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteUserConfirmed(string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var user = await _userManager.FindByIdAsync(id);
+                if (user != null) 
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+                
+                return RedirectToAction(nameof(GetUserList));
             }
             catch
             {

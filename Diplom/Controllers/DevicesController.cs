@@ -471,6 +471,7 @@ namespace Diplom.Controllers
 
             return View(device);
         }
+
         [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

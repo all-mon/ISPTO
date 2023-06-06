@@ -9,7 +9,7 @@
 <h4>Изменить параметры</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -39,7 +39,7 @@
             <div class="form-group mb-3">
                 <div class="col-md-offset-2 col-md-10">
                     <label asp-for="DevicePlacements">Места установки:</label>
-                    <table>
+                    <table class="table">
                         <tr>
                             @{
                                 int cnt = 0;
