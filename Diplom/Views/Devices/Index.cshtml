@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "Оборудование";
 }
-
-<div class="p-3 border bg-light mb-4">
+<div class="row p-3 border rounded bg-light mb-4">
     <h1>Просмотр оборудования</h1>
 
 
@@ -16,18 +15,19 @@
         <div class="form-actions no-color">
             <p>
                 Поиск: <input type="text" placeholder="название\описание" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                
+
                 <button type="submit" class="btn btn-light">
                     <i class="bi bi-search"></i>
                 </button>
                 | <a asp-action="Index" class="btn btn-light"><i class="bi bi-x-lg"></i></a>
-                
+
             </p>
-            
+
         </div>
     </form>
 </div>
 
+<div class="container p-4 mb-5">
 <p class="mb-1">
     <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" >Название</a>
 </p>
@@ -37,7 +37,7 @@
     <div class="card mb-3" >
         <div class="row g-0">
             <div class="col-md-2">
-                <img src="@item.ImagePath" class="img-fluid rounded-start " alt="..." width="50%">
+                <img src="@item.ImagePath" class="img-fluid rounded " alt="..." width="155">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -76,3 +76,4 @@
    class="btn btn-default @nextDisabled">
     Следующая
 </a>
+</div>

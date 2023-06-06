@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Devices" asp-action="Index"><img src="/images/logo/site_header_logo.png" class="img-fluid rounded-start " alt="..."></a>
+                <a class="navbar-brand" asp-controller="Devices" asp-action="Index"><img src="/images/logo/site_header_logo.png" class="img-fluid rounded-start " alt="..."></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,16 +24,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Devices" asp-action="Index">Оборудование</a>
+                            <a class="nav-link text-dark" asp-controller="Devices" asp-action="Index">Оборудование</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="Index">Задачи</a>
+                            <a class="nav-link text-dark" asp-controller="Goals" asp-action="Index">Задачи</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LogEntries" asp-action="Index">Журнал работ</a>
+                            <a class="nav-link text-dark" asp-controller="LogEntries" asp-action="Index">Журнал работ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Instructions" asp-action="Index">Инструкции</a>
+                            <a class="nav-link text-dark" asp-controller="Instructions" asp-action="Index">Инструкции</a>
                         </li>
                         @if (User.IsInRole("Administrator"))
                         {
@@ -58,17 +58,23 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container mb-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Diplom - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <div class="container">
+        <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a asp-controller="Devices" asp-action="Index" class="nav-link px-2 text-muted">Оборудование</a></li>
+                <li class="nav-item"><a asp-controller ="Goals" asp-action="Index" class="nav-link px-2 text-muted">Задачи</a></li>
+                <li class="nav-item"><a asp-controller ="LogEntries" asp-action="Index" class="nav-link px-2 text-muted">Журнал</a></li>
+                <li class="nav-item"><a asp-controller="Instructions" asp-action="Index" class="nav-link px-2 text-muted">Инструкции</a></li>
+            </ul>
+            <p class="text-center text-muted">ИС ПТО</p>
+        </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

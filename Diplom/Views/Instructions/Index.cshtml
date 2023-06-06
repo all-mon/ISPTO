@@ -4,7 +4,7 @@
     ViewData["Title"] = "Инструкции";
 }
 
-<div class="p-3 border bg-light mb-4">
+<div class="row p-3 border rounded bg-light mb-4">
     <h1>Просмотр инструкций</h1>
     <p>
         <a asp-action="Create">Добавить инструкцию</a>
@@ -26,6 +26,9 @@
     </form>
 </div>
 
+
+
+<div class="container p-4">
 @foreach(var item in Model)
 {
     <div class="card text-center mb-3">
@@ -48,3 +51,4 @@
     </div>
    
 }
+</div>

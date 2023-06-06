@@ -4,7 +4,7 @@
     ViewData["Title"] = "Просмотр журнала";
 }
 
-<div class="p-3 border bg-light mb-4">
+<div class="row p-3 border rounded bg-light mb-4">
     <h1>Просмотр журнала</h1>
     <p>
         <a asp-action="Create">Добавить запись</a>
@@ -26,6 +26,7 @@
     </form>
 </div>
 
+<div class="container p-4">
 @foreach (var item in Model)
 {
     <div class="card mb-3">
@@ -57,3 +58,4 @@
         </div>
     </div>
 }
+</div>
