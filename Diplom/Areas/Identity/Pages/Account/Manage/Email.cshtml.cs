@@ -151,6 +151,7 @@ namespace Diplom.Areas.Identity.Pages.Account.Manage
                 if (user != null)
                 {
                     user.Email = Input.NewEmail;
+                    user.UserName = Input.NewEmail;
                     var result = await _userManager.UpdateAsync(user);
 
                     if (result.Succeeded)

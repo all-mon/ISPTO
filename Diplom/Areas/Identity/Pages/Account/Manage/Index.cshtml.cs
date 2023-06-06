@@ -25,7 +25,7 @@ namespace Diplom.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        [Display(Name ="Почта(логин)")]
         public string Username { get; set; }
 
         [TempData]
