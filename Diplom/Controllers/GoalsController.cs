@@ -27,15 +27,7 @@ namespace Diplom.Controllers
         [Authorize(Roles = "Administrator, Employee")]
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-            /*
-                        ViewData["CurrentSort"] = sortOrder;
-                        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-                        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-                        ViewData["IsCompletedSortParm"] = sortOrder == "CompletedTrue" ? "CompletedFalse" : "CompletedTrue";*/
-
-
             ViewData["CurrentSort"] = sortOrder ?? "";
-
             ViewData["NameSortParm"] = sortOrder == "name_asc" ? "name_desc" : "name_asc";
             ViewData["DateSortParm"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
             ViewData["IsCompletedParm"] = sortOrder == "completed_true" ? "completed_false" : "completed_true";
@@ -56,28 +48,8 @@ namespace Diplom.Controllers
             {
                 tasks = tasks.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
             }
-            //сортировка по имети/приоритету
-            /*switch (sortOrder)
-            {
-                case "name_desc":
-                    tasks = tasks.OrderByDescending(t => t.Name);
-                    break;
-                case "Date":
-                    tasks = tasks.OrderBy(t => t.TaskDate);
-                    break;
-                case "date_desc":
-                    tasks = tasks.OrderByDescending(t => t.TaskDate);
-                    break;
-                case "CompletedTrue":
-                    tasks = tasks.Where(t => t.IsCompleted);
-                    break;
-                case "CompletedFalse":
-                    tasks = tasks.Where(t => !t.IsCompleted);
-                    break;
-                default:
-                    tasks = tasks.OrderBy(t => t.Name);
-                    break;
-            }*/
+            
+            //сортировка по параметрам
             if (!string.IsNullOrEmpty(sortOrder))
             {
                 
@@ -103,7 +75,6 @@ namespace Diplom.Controllers
             {
                 tasks = tasks.OrderBy(t => t.Name);
             }
-
 
             //количество записей на странице
             int pageSize = 12;
@@ -137,8 +108,6 @@ namespace Diplom.Controllers
         }
 
         // POST: Goals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -171,8 +140,6 @@ namespace Diplom.Controllers
         }
 
         // POST: Goals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
@@ -23,10 +18,49 @@ namespace Diplom.Controllers
 
         // GET: Instructions
         [Authorize(Roles = "Employee, Administrator")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-              return _context.Instruction != null ? 
-                          View(await _context.Instruction.ToListAsync()) :
+            ViewData["CurrentSort"] = sortOrder ?? "";
+            ViewData["DateSortParm"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var instructions = from i in _context.Instruction select i;
+
+            //поиск по имени или описанию
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                instructions = instructions.Where(i => i.Name!.Contains(searchString));
+            }
+
+            //сортировка по параметрам
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder.Contains("date"))
+                {
+                    instructions = sortOrder.EndsWith("_asc")
+                        ? instructions.OrderBy(t => t.CreatedDate)
+                        : instructions.OrderByDescending(t => t.CreatedDate);
+                }
+            }
+            else
+            {
+                instructions = instructions.OrderBy(t => t.Name);
+            }
+
+            //количество записей на странице
+            int pageSize = 10;
+
+            return _context.Instruction != null ?
+                          View(await PaginatedList<Instruction>.CreateAsync(instructions.AsNoTracking(), pageNumber ?? 1, pageSize)) :
                           Problem("Entity set 'DiplomContext.Instruction'  is null.");
         }
 
@@ -63,6 +97,7 @@ namespace Diplom.Controllers
         {
             if (ModelState.IsValid)
             {
+                instruction.CreatedDate = DateTime.Now;
                 _context.Add(instruction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -15,5 +15,9 @@ namespace Diplom.Models
 
         [DisplayName("Статья")]
         public string? Content { get; set; }
+
+        [Display(Name ="Дата создания")]
+        [DataType(DataType.Date)]
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Diplom.Models.LogEntry>
+﻿@model PaginatedList<Diplom.Models.LogEntry>
 
 @{
     ViewData["Title"] = "Просмотр журнала";
@@ -19,11 +19,19 @@
                     <i class="bi bi-search"></i>
                 </button>
                 | <a asp-action="Index" class="btn btn-light"><i class="bi bi-x-lg"></i></a>
-
             </p>
-
         </div>
     </form>
+    <div class="dropdown mb-1">
+        <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            Вариант сортировки
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_asc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_asc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по возрастанию)</a></li>
+            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_desc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по убыванию)</a></li>
+        </ul>
+    </div>
 </div>
 
 <div class="container p-4">
@@ -58,4 +66,23 @@
         </div>
     </div>
 }
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Назад
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Следующая
+    </a>
 </div>

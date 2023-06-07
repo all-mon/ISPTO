@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
@@ -23,11 +18,50 @@ namespace Diplom.Controllers
         }
 
         // GET: LogEntries
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-              return _context.LogEntry != null ? 
-                          View(await _context.LogEntry.ToListAsync()) :
-                          Problem("Entity set 'DiplomContext.LogEntry'  is null.");
+            ViewData["CurrentSort"] = sortOrder ?? "";
+            ViewData["DateSortParm"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            var entries = from i in _context.LogEntry select i;
+
+            //поиск по имени или описанию
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                entries = entries.Where(i => i.Name!.Contains(searchString));
+            }
+
+            //сортировка по параметрам
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder.Contains("date"))
+                {
+                    entries = sortOrder.EndsWith("_asc")
+                        ? entries.OrderBy(t => t.Date)
+                        : entries.OrderByDescending(t => t.Date);
+                }
+            }
+            else
+            {
+                entries = entries.OrderBy(t => t.Name);
+            }
+
+            //количество записей на странице
+            int pageSize = 10;
+
+            return _context.Instruction != null ?
+                          View(await PaginatedList<LogEntry>.CreateAsync(entries.AsNoTracking(), pageNumber ?? 1, pageSize)) :
+                          Problem("Entity set 'DiplomContext.Instruction'  is null.");
         }
 
         // GET: LogEntries/Details/5
@@ -55,8 +89,6 @@ namespace Diplom.Controllers
         }
 
         // POST: LogEntries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name,Description,CreatedDate,Date,Executor")] LogEntry logEntry)
@@ -87,8 +119,6 @@ namespace Diplom.Controllers
         }
 
         // POST: LogEntries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description,CreatedDate,Date,Executor")] LogEntry logEntry)

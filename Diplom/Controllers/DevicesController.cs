@@ -22,13 +22,10 @@ namespace Diplom.Controllers
         }
 
         //Главная GET: Devices
-        
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder)? "name_desc" : "";
-            
-
 
             if (searchString != null)
             {
@@ -60,7 +57,6 @@ namespace Diplom.Controllers
             //количество записей на странице
             int pageSize = 10;
             return View(await PaginatedList<Device>.CreateAsync(devices.AsNoTracking(), pageNumber ?? 1, pageSize));
-
         }
 
         //Подробнее GET: Devices/Details/5
@@ -511,7 +507,7 @@ namespace Diplom.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException  ex )
+            catch (DbUpdateException ex)
             {
                 //Log the error (uncomment ex variable name and write a log.)
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
