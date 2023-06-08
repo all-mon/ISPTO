@@ -8,6 +8,7 @@ namespace Diplom.Models
     {
         public int ID { get; set; }
         [DisplayName("Название")]
+        [MaxLength(255)]
         public string Name { get; set; } = "Empty";
 
         [DisplayName("Описание")]

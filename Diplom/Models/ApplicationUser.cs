@@ -7,6 +7,7 @@ namespace Diplom.Models
     {
         [PersonalData]
         [Display(Name ="ФИО")]
+        [MaxLength(255)]
         public string? FullName { get; set; }
     }
 }

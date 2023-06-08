@@ -12,7 +12,7 @@ namespace Diplom.Models
         [DisplayName("Название")]
         [Required(ErrorMessage = "Введите название")]
         [UniqueDevice(ErrorMessage = "Оборудование с таким названием уже существует.")]
-        [MaxLength(100)]
+        [MaxLength(255)]
         [MinLength(3)]
         public string Name { get; set; } = "Empty";
 

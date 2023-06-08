@@ -8,9 +8,11 @@ namespace Diplom.Models
         public int ID { get; set; }
 
         [DisplayName("Заголовок")]
+        [MaxLength(255)]
         public string Name { get; set; } = "Без названия";
 
         [DisplayName("Краткое описание")]
+        [MaxLength(600)]
         public string? Description { get; set; }
 
         [DisplayName("Статья")]

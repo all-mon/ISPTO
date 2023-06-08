@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Diplom.Models
 {
@@ -6,6 +7,7 @@ namespace Diplom.Models
     {
         public int ID { get; set; }
         [DisplayName("Заголовок")]
+        [MaxLength(255)]
         public string Name { get; set; } = "Без названия";
         [DisplayName("Описание")]
         public string? Description { get; set; }
