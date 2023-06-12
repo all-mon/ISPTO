@@ -7,10 +7,11 @@
 
 <!--Фильтры-->
 <div class="row p-3 border rounded bg-light mb-4">
+    <div class="col-auto col-md-9 col-sm-9 ">
     <h1>Просмотр задач</h1>
     <p><a asp-action="Create">Добавить задачу</a></p>
     <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
+            <div class="form-actions no-color align-self-end">
             <p>
                 Поиск: <input type="text" placeholder="название\описание" name="SearchString" value="@ViewData["CurrentFilter"]" />
 
@@ -23,19 +24,22 @@
 
         </div>
     </form>
-    <div class="dropdown mb-1">
-        <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-            Вариант сортировки
-        </a>
+    </div>
+    <div class=" dropdown mb-1 col-auto col-md-3 col-lg-3 align-self-end">
+        
+            <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Вариант сортировки
+            </a>
 
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "name_asc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="name_asc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По названию (по возрастанию)</a></li>
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "name_desc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="name_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По названию (по убыванию)</a></li>
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_asc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_asc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по возрастанию)</a></li>
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_desc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по убыванию)</a></li>
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "completed_true" ? "active" : "")" asp-action="Index" asp-route-sortOrder="completed_true" asp-route-currentFilter="@ViewData["CurrentFilter"]">Завершенные задачи</a></li>
-            <li><a class="dropdown-item @(ViewData["CurrentSort"] == "completed_false" ? "active" : "")" asp-action="Index" asp-route-sortOrder="completed_false" asp-route-currentFilter="@ViewData["CurrentFilter"]">Незавершенные задачи</a></li>
-        </ul>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "name_asc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="name_asc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По названию (по возрастанию)</a></li>
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "name_desc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="name_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По названию (по убыванию)</a></li>
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_asc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_asc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по возрастанию)</a></li>
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "date_desc" ? "active" : "")" asp-action="Index" asp-route-sortOrder="date_desc" asp-route-currentFilter="@ViewData["CurrentFilter"]">По дате (по убыванию)</a></li>
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "completed_true" ? "active" : "")" asp-action="Index" asp-route-sortOrder="completed_true" asp-route-currentFilter="@ViewData["CurrentFilter"]">Завершенные задачи</a></li>
+                <li><a class="dropdown-item @(ViewData["CurrentSort"] == "completed_false" ? "active" : "")" asp-action="Index" asp-route-sortOrder="completed_false" asp-route-currentFilter="@ViewData["CurrentFilter"]">Незавершенные задачи</a></li>
+            </ul>
+        
     </div>
 </div>
 

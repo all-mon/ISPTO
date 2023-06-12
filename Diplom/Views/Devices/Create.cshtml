@@ -11,35 +11,35 @@
 
 
 <form enctype="multipart/form-data" asp-action="Create" method="post">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="Description"></label>
         <input asp-for="Description" class="form-control" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="ImageFile" class="control-label"></label>
         <input asp-for="ImageFile" type="file" accept=".jpg, .png, .pdf" class="form-control" />
         <span asp-validation-for="ImageFile" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="DocumentationFile" class="control-label"></label>
         <input asp-for="DocumentationFile" type="file" accept=".jpg, .png, .pdf" class="form-control" />
         <span asp-validation-for="DocumentationFile" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-md-2 mb-3">
         <label asp-for="QuantityInStock"></label>
         <input asp-for="QuantityInStock" class="form-control" />
         <span asp-validation-for="QuantityInStock" class="text-danger"></span>
     </div>
-    <div class="col-md-offset-2 col-md-10">
+    <div class="col-md-offset-2 col-md-10 mb-3">
         <label asp-for="DevicePlacements"></label>
         <table class="table">
             <tr>
@@ -66,8 +66,8 @@
         </table>
     </div>
 
-    <div class="form-group mb-3">
-    <label asp-for="AnalogDevice">Выбор аналогов:</label>
+    <div class="form-group mb-3 col-md-6">
+    <label asp-for="AnalogDevice">Выбор аналогов</label>
     <select name="selectedAnalogDevices" asp-items="@ViewBag.AnalogDevices" class="form-control" multiple>
         <option value="">-- Нет аналогов --</option>
     </select>

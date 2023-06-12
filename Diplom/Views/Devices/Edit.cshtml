@@ -9,7 +9,7 @@
 <h4>Изменить параметры</h4>
 <hr />
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -20,25 +20,26 @@
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            
             <div class="form-group mb-3">
                 <label asp-for="ImageFile" class="control-label">Изображение</label><br>
                 <input type="hidden" asp-for="ImagePath" />
-                <input asp-for="ImageFile" type="file" class="form-control-file" />
+                <input asp-for="ImageFile" type="file" class="form-control" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="DocumentationFile" class="control-label">Документация</label><br>
                 <input type="hidden" asp-for="DocumentPath" />
-                <input asp-for="DocumentationFile" type="file" class="form-control-file" />
+                <input asp-for="DocumentationFile" type="file" class="form-control" />
                 <span asp-validation-for="DocumentationFile" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
                 <div class="col-md-offset-2 col-md-10">
-                    <label asp-for="DevicePlacements">Места установки:</label>
+                    <label asp-for="DevicePlacements">Места установки</label>
                     <table class="table">
                         <tr>
                             @{
@@ -65,15 +66,15 @@
                 </div>
                 
             </div>
-            <div class="form-group mb-3">
-                    <label asp-for="AnalogDevice">Аналоги:</label>
+            <div class="form-group mb-3 col-md-5">
+                    <label asp-for="AnalogDevice">Аналоги</label>
                     <select name="selectedAnalogDevices" asp-items="@ViewBag.AnalogDevices" class="form-control" multiple>
                         <option value=""> Нет аналогов</option>
 
                     </select>
                     <span asp-validation-for="AnalogDevice" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mb-3  col-md-2">
                 <label asp-for="QuantityInStock"></label>
                 <input asp-for="QuantityInStock" class="form-control" />
                 <span asp-validation-for="QuantityInStock" class="text-danger"></span>
