@@ -6,6 +6,7 @@ using Diplom.Models;
 using Diplom.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Diplom.Controllers
 {
@@ -42,7 +43,7 @@ namespace Diplom.Controllers
             //поиск по имени или описанию
             if (!String.IsNullOrEmpty(searchString))
             {
-                devices = devices.Where(d => d.Name!.Contains(searchString) || d.Description.Contains(searchString));
+                devices = devices.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
             }
             //сортировка по имети
             switch (sortOrder) 
@@ -113,6 +114,7 @@ namespace Diplom.Controllers
         public async Task<IActionResult> Create(Device device, string[] selectedPlacements, int[] selectedAnalogDevices)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
+           
             try
             {
                 if (ModelState.IsValid)
@@ -149,6 +151,7 @@ namespace Diplom.Controllers
                     
                     // Логика сохранения оборудования в базе данных
                     _context.Add(device);
+                    
                     UpdateDevicePlacements(selectedPlacements, device);
                     PopulateAssignedPlacementData(device);
 
@@ -264,9 +267,12 @@ namespace Diplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Edit(int? id, string[] selectedPlacements,
+        public async Task<IActionResult> Edit(
+            int? id,
+            string[] selectedPlacements,
             string[] selectedAnalogDevices,
-            IFormFile? imageFile, IFormFile? documentationFile)
+            IFormFile? imageFile,
+            IFormFile? documentationFile)
         {
             if (id == null)
             {
@@ -279,7 +285,9 @@ namespace Diplom.Controllers
                 .ThenInclude(dp => dp.Placement)
             .FirstOrDefaultAsync(d => d.ID == id);
 
-            if (await TryUpdateModelAsync<Device>(
+           
+
+             if (await TryUpdateModelAsync<Device>(
                 deviceToUpdate! ,"", d => d.Name, d => d.Description, d=>d.QuantityInStock) && deviceToUpdate != null)
             {
                 string oldImagePath = deviceToUpdate.ImagePath!;
@@ -507,7 +515,7 @@ namespace Diplom.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException /*ex*/)
             {
                 //Log the error (uncomment ex variable name and write a log.)
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
