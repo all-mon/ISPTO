@@ -12,6 +12,7 @@ namespace Diplom.Models
         [DisplayName("Описание")]
         public string? Description { get; set; }
         [DisplayName("Дата записи")]
+        [DataType(DataType.DateTime)]
         public DateTime CreatedDate { get; set; }
         [DisplayName("Дата выполнения")]
         public DateTime Date { get; set;}

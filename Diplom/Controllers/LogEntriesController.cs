@@ -91,10 +91,13 @@ namespace Diplom.Controllers
         // POST: LogEntries/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Description,CreatedDate,Date,Executor")] LogEntry logEntry)
+        public async Task<IActionResult> Create([Bind("ID,Name,Description,Date,Executor")] LogEntry logEntry)
         {
             if (ModelState.IsValid)
             {
+                logEntry.CreatedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute,0);
+                                  
+                
                 _context.Add(logEntry);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
