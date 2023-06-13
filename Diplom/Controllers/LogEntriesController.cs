@@ -95,9 +95,7 @@ namespace Diplom.Controllers
         {
             if (ModelState.IsValid)
             {
-                logEntry.CreatedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute,0);
-                                  
-                
+                logEntry.CreatedDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);               
                 _context.Add(logEntry);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

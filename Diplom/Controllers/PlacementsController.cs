@@ -86,9 +86,6 @@ namespace Diplom.Controllers
             return View(placement);
         }
 
-        // POST: Placements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Description")] Placement placement)

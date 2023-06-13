@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Diplom.Data;
 using Diplom.Models;
@@ -12,17 +7,14 @@ using System.Data;
 
 namespace Diplom.Controllers
 {
-    
+
     public class GoalsController : Controller
     {
         private readonly DiplomContext _context;
-
         public GoalsController(DiplomContext context)
         {
             _context = context;
         }
-
-
         // GET: Goals
         [Authorize(Roles = "Administrator, Employee")]
         public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
@@ -40,15 +32,12 @@ namespace Diplom.Controllers
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-
             var tasks = from t in _context.Task select t;
-
             //поиск по имени или описанию
             if (!String.IsNullOrEmpty(searchString))
             {
                 tasks = tasks.Where(d => d.Name!.Contains(searchString) || d.Description!.Contains(searchString));
             }
-            
             //сортировка по параметрам
             if (!string.IsNullOrEmpty(sortOrder))
             {
@@ -80,7 +69,6 @@ namespace Diplom.Controllers
             int pageSize = 12;
             return View(await PaginatedList<Goal>.CreateAsync(tasks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
         // GET: Goals/Details/5
         [Authorize(Roles = "Administrator, Employee")]
         public async Task<IActionResult> Details(int? id)
@@ -99,14 +87,12 @@ namespace Diplom.Controllers
 
             return View(goal);
         }
-
         // GET: Goals/Create
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
            return View();
         }
-
         // POST: Goals/Create
         [Authorize(Roles = "Administrator")]
         [HttpPost]
@@ -121,7 +107,6 @@ namespace Diplom.Controllers
             }
             return View(goal);
         }
-
         // GET: Goals/Edit/5
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
@@ -138,7 +123,6 @@ namespace Diplom.Controllers
             }
             return View(goal);
         }
-
         // POST: Goals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -191,7 +175,6 @@ namespace Diplom.Controllers
 
             return View(goal);
         }
-
         // POST: Goals/Delete/5
         [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
@@ -211,7 +194,6 @@ namespace Diplom.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool GoalExists(int id)
         {
           return (_context.Task?.Any(e => e.ID == id)).GetValueOrDefault();
