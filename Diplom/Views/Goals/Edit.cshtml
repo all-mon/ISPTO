@@ -9,7 +9,7 @@
 <h4>@Html.DisplayFor(m=>m.Name)</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -23,12 +23,12 @@
                 <textarea asp-for="Description" class="form-control" rows="8"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mb-3 col-md-4">
                 <label asp-for="TaskDate" class="form-label"></label>
                 <input asp-for="TaskDate" class="form-control" />
                 <span asp-validation-for="TaskDate" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mb-3 col-md-4">
                 <label asp-for="Priority" class="form-label"></label>
                 <select asp-for="Priority" class="form-select" asp-items="Html.GetEnumSelectList<Diplom.Models.Enums.TaskPriority>()">
                     <option selected="selected" value="">--Не выбран--</option>

@@ -111,7 +111,7 @@ namespace Diplom.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create(Device device, string[] selectedPlacements, int[] selectedAnalogDevices)
+        public async Task<IActionResult> Create(Device device, string[] selectedPlacements, string[] selectedAnalogDevices)
         {
             // var errors = ModelState.Values.SelectMany(v => v.Errors);
            
@@ -159,11 +159,15 @@ namespace Diplom.Controllers
 
                     if (selectedAnalogDevices != null)
                     {
-                        foreach (int analogDeviceId in selectedAnalogDevices)
+                        foreach (var analogDeviceId in selectedAnalogDevices)
                         {
-                            // Создаем связь "многие ко многим" и добавляем ее в контекст базы данных
-                            AnalogDevice analogDevice = new AnalogDevice { DeviceId = device.ID, AnalogId = analogDeviceId };
-                            _context.AnalogDevice.Add(analogDevice);
+                            if (!analogDeviceId.IsNullOrEmpty())
+                            {
+                                var id = int.Parse(analogDeviceId);
+                                // Создаем связь "многие ко многим" и добавляем ее в контекст базы данных
+                                AnalogDevice analogDevice = new AnalogDevice { DeviceId = device.ID, AnalogId = id };
+                                _context.AnalogDevice.Add(analogDevice);
+                            }   
                         }
                         await _context.SaveChangesAsync();
                     }

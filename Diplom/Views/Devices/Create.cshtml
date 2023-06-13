@@ -71,7 +71,7 @@
     <select name="selectedAnalogDevices" asp-items="@ViewBag.AnalogDevices" class="form-control" multiple>
         <option value="">-- Нет аналогов --</option>
     </select>
-    <span asp-validation-for="AnalogDevice" class="text-danger"></span>
+    @*<span asp-validation-for="AnalogDevice" class="text-danger"></span>*@
     </div>
 
     <button type="submit" class="btn btn-primary">Сохранить</button>
