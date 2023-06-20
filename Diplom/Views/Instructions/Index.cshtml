@@ -8,9 +8,16 @@
 <div class="row p-3 border rounded bg-light mb-4">
     <div class="col-auto col-md-9 col-lg-9">
     <h1>Просмотр инструкций</h1>
-    <p>
-        <a asp-action="Create">Добавить инструкцию</a>
-    </p>
+        @if (User.IsInRole("Administrator"))
+        {
+            <p>
+                <a asp-action="Create">Добавить новое</a>
+            </p>
+        }
+        else
+        {
+            <p class="mb-5"></p>
+        }
 
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
@@ -45,10 +52,13 @@
     <div class="card text-center mb-3">
         <div class="card-header">
             @Html.DisplayFor(m=>item.Name)
+            @if(User.IsInRole("Administrator"))
+            {
             <div class="position-absolute top-0 end-0">
                 <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
                 | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
             </div>
+            }
         </div>
        
         <div class="card-body">

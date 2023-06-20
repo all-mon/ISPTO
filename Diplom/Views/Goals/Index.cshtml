@@ -9,7 +9,18 @@
 <div class="row p-3 border rounded bg-light mb-4">
     <div class="col-auto col-md-9 col-sm-9 ">
     <h1>Просмотр задач</h1>
-    <p><a asp-action="Create">Добавить задачу</a></p>
+        @if (User.IsInRole("Administrator"))
+        {
+            <p>
+                <a asp-action="Create">Добавить новое</a>
+            </p>
+        }
+        else
+        {
+            <p class="mb-5"></p>
+        }
+
+
     <form asp-action="Index" method="get">
             <div class="form-actions no-color align-self-end">
             <p>
@@ -55,34 +66,65 @@
                     <div class="card-header  text-success border-success">
                         <div>
                             @Html.DisplayFor(modelItem => item.Priority)
-                        </div>
-                        <div class="position-absolute top-0 end-0">
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
-                                <i class="bi bi-info-circle"></i>
-                            </button>
+                        </div>                     
+                            @if(User.IsInRole("Administrator"))
+                                {
+                                        <div class="position-absolute top-0 end-0">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                                <i class="bi bi-info-circle"></i>
+                                            </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-black">
+                                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> | 
+                                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
                                         </div>
-                                        <div class="modal-body text-black">
-                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                    }
+                            else
+                                    {
+
+                                        <div class="position-absolute top-0 end-0">
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                                <i class="bi bi-info-circle"></i>
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-black">
+                                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> | 
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                    }
                         </div>
-                    </div>
                     <div class="card-body">
                         <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
                         @if (item.IsCompleted)
@@ -107,31 +149,63 @@
                         <div>
                             @Html.DisplayFor(modelItem => item.Priority)
                         </div>
-                        <div class="position-absolute top-0 end-0">
-                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
-                                <i class="bi bi-info-circle"></i>
-                            </button>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <div class="position-absolute top-0 end-0">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-black">
+                                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-body text-black">
-                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                    </div> |
+                                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                                    | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="position-absolute top-0 end-0">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-black">
+                                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> |
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
-                        </div>
+                            }
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
@@ -158,31 +232,63 @@
                         <div>                        
                              @Html.DisplayFor(modelItem => item.Priority)  
                         </div>
-                        <div class="position-absolute top-0 end-0">
-                           
-                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
-                                <i class="bi bi-info-circle"></i>
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <div class="position-absolute top-0 end-0">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-black">
+                                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-body text-black">
-                                            <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                    </div> |
+                                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                                    | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                </div>
+                            }
+                            else
+                            {
+
+                                <div class="position-absolute top-0 end-0">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                        <i class="bi bi-info-circle"></i>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal-@item.ID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Описание задачи</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-black">
+                                                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Закрыть</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> |
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
-                        </div>
+                            }
                     </div>
                     <div class="card-body">
                         <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>

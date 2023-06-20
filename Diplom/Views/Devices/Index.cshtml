@@ -4,12 +4,20 @@
     ViewData["Title"] = "Оборудование";
 }
 <div class="row p-3 border rounded bg-light mb-4">
+    <div class="col-auto col-md-9 col-sm-9 ">
     <h1>Просмотр оборудования</h1>
 
+    @if (User.IsInRole("Administrator"))
+    {
+        <p>
+            <a asp-action="Create">Добавить новое</a>
+        </p>
+    }
+    else
+    {
+        <p class="mb-5"></p>
+    }
 
-    <p>
-        <a asp-action="Create">Добавить новое</a>
-    </p>
 
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
@@ -25,6 +33,7 @@
 
         </div>
     </form>
+    </div>
 </div>
 
 <div class="container-fluid p-4 mb-5">
@@ -47,11 +56,21 @@
                         <i class="bi bi-filetype-pdf"></i>Просмотр документации</a></small></p>
                 </div>
             </div>
-            <div class="col-md-2">
-                <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
-            </div>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <div class="col-md-2">
+                        <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-2 align-self-baseline d-flex flex-row-reverse">
+                        <a asp-action="Details" class="btn btn-secondary " asp-route-id="@item.ID"><i class="bi bi-info-circle"></i></a>
+                    </div>
+                }
+            
         </div>
     </div>
     }
