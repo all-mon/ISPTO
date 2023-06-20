@@ -63,13 +63,14 @@
         {
             <div class="col-md-3" >
                 <div class="card border-success mb-3">
-                    <div class="card-header  text-success border-success">
+                        <div class="card-header d-flex justify-content-between text-success border-success">
                         <div>
                             @Html.DisplayFor(modelItem => item.Priority)
-                        </div>                     
+                        </div>  
+                        
                             @if(User.IsInRole("Administrator"))
                                 {
-                                        <div class="position-absolute top-0 end-0">
+                                <div class="btn-group btn-group-sm">
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                                 <i class="bi bi-info-circle"></i>
@@ -91,17 +92,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div> | 
+                                            </div> 
                                             <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                                            | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
-                                        </div>
-                                    }
+                                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                </div>
+                                }
                             else
-                                    {
+                                {
 
-                                        <div class="position-absolute top-0 end-0">
+                                       <div>
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                            <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                                 <i class="bi bi-info-circle"></i>
                                             </button>
 
@@ -122,8 +123,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                       </div>
                                     }
+                                    
                         </div>
                     <div class="card-body">
                         <h5 class="card-title"> @Html.DisplayFor(modelItem => item.Name)</h5>
@@ -145,13 +147,13 @@
         {
             <div class="col-md-3">
                 <div class="card border-primary mb-3">
-                    <div class="card-header border-primary  text-primary">
+                        <div class="card-header border-primary d-flex justify-content-between text-primary">
                         <div>
                             @Html.DisplayFor(modelItem => item.Priority)
                         </div>
                             @if (User.IsInRole("Administrator"))
                             {
-                                <div class="position-absolute top-0 end-0">
+                                <div class="btn-group btn-group-sm">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                         <i class="bi bi-info-circle"></i>
@@ -173,17 +175,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> |
+                                    </div>
                                     <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                                    | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
                                 </div>
                             }
                             else
                             {
 
-                                <div class="position-absolute top-0 end-0">
+                                <div>
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                         <i class="bi bi-info-circle"></i>
                                     </button>
 
@@ -228,13 +230,13 @@
         {
             <div class="col-md-3">
                 <div class="card border-danger mb-3">
-                    <div class="card-header border-danger text-danger">
+                    <div class="card-header border-danger d-flex justify-content-between text-danger">
                         <div>                        
                              @Html.DisplayFor(modelItem => item.Priority)  
                         </div>
                             @if (User.IsInRole("Administrator"))
                             {
-                                <div class="position-absolute top-0 end-0">
+                                <div class="btn-group btn-group-sm">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                         <i class="bi bi-info-circle"></i>
@@ -256,17 +258,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> |
+                                    </div>
                                     <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                                    | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
                                 </div>
                             }
                             else
                             {
 
-                                <div class="position-absolute top-0 end-0">
+                                <div>
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
+                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.ID">
                                         <i class="bi bi-info-circle"></i>
                                     </button>
 

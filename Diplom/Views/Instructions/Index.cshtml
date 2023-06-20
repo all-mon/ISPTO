@@ -50,13 +50,13 @@
 @foreach(var item in Model)
 {
     <div class="card text-center mb-3">
-        <div class="card-header">
+            <div class="card-header d-flex justify-content-between">
             @Html.DisplayFor(m=>item.Name)
             @if(User.IsInRole("Administrator"))
             {
-            <div class="position-absolute top-0 end-0">
+            <div class="btn-group btn-group-sm" >
                 <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
-                | <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
             </div>
             }
         </div>

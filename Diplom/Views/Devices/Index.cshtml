@@ -58,16 +58,18 @@
             </div>
                 @if (User.IsInRole("Administrator"))
                 {
-                    <div class="col-md-2">
-                        <a asp-action="Edit" asp-route-id="@item.ID">Изменить</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Подробно</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Удалить</a>
+                    <div class="col-md-2 align-self-baseline d-flex flex-row-reverse">
+                        <div class="btn-group btn-group-sm m-1">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-pencil"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-info-circle"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-light"><i class="bi bi-trash"></i></a>
+                        </div>
                     </div>
                 }
                 else
                 {
                     <div class="col-md-2 align-self-baseline d-flex flex-row-reverse">
-                        <a asp-action="Details" class="btn btn-secondary " asp-route-id="@item.ID"><i class="bi bi-info-circle"></i></a>
+                        <a asp-action="Details" class="btn btn-secondary m-1" asp-route-id="@item.ID"><i class="bi bi-info-circle"></i></a>
                     </div>
                 }
             
